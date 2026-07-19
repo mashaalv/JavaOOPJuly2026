@@ -10,7 +10,6 @@ public class Range {
     }
 
     public double getFrom() {
-
         return from;
     }
 
@@ -66,22 +65,22 @@ public class Range {
 
     public Range[] difference(Range anotherRange) {
         // нет пересечений, возвращаем первый интервал
-        if (max(this.from, anotherRange.from) > min(this.to, anotherRange.to)) {
+        if (max(this.from, anotherRange.from) >= min(this.to, anotherRange.to)) {
             return new Range[]{this};
         }
-        // есть пересечения, a1<a2, b2>b1 -- [a1,a2]
-        if (anotherRange.from > this.from && anotherRange.to > this.to) {
+        // есть пересечения a2>a1, b2>b1 -- [a1,a2]
+        if (this.from < anotherRange.from && anotherRange.to >= this.to) {
             return new Range[]{new Range(this.from, anotherRange.from)};
         }
         //есть пересечения, a2<a1, b2<b1 -- [b2,b1]
-        if (anotherRange.from < this.from && anotherRange.to < this.to) {
+        if (anotherRange.from <= this.from && anotherRange.to < this.to) {
             return new Range[]{new Range(anotherRange.to, this.to)};
         }
         //есть пересечения, a2>a1, b2<b1 --[a1,a2] и [b2,b1]
         if (anotherRange.from > this.from && anotherRange.to < this.to) {
-            return new Range[]{new Range(this.to, anotherRange.to), new Range(anotherRange.from, this.from)};
+            return new Range[]{new Range(this.from, anotherRange.from), new Range(anotherRange.to, this.to)};
         }
-        // иначе второй интервал включает первый - ноль
+        // иначе второй интервал включает первый - пустой интервал
         return new Range[0];
     }
 }
