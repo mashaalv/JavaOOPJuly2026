@@ -29,58 +29,65 @@ public class Range {
         return to - from;
     }
 
-    public boolean isInside(double pointX) {
-        return from <= pointX && pointX <= to;
+    public boolean isInside(double point) {
+        return from <= point && point <= to;
     }
 
 
-    public double max(double number1, double number2) {
-        return number2 > number1 ? number2 : number1;
-    }
-
-    public double min(double number1, double number2) {
-        return number2 < number1 ? number2 : number1;
-    }
-
-    public Range intersection(Range anotherRange) {
+    public Range intersection(Range range) {
         // если нет пересечения, возвращаем null, иначе пересечение
-        if (max(this.from, anotherRange.from) >= min(this.to, anotherRange.to)) {
+        double left = Math.max(from, range.from);
+        double right = Math.min(to, range.to);
+
+        if (left >= right) {
             return null;
         }
-        return new Range(max(this.from, anotherRange.from), min(this.to, anotherRange.to));
+
+        return new Range(left, right);
     }
 
-    public Range[] union(Range anotherRange) {
-        // если нет пересечения, возвращаем 2 интервала, иначе 1
-        if (max(this.from, anotherRange.from) > min(this.to, anotherRange.to)) {
-
-            if (this.from < anotherRange.from) {
-                return new Range[]{this, anotherRange};
-            } else {
-                return new Range[]{anotherRange, this};
-            }
+    public Range[] union(Range range) {
+        double left = Math.max(from, range.from);
+        double right = Math.min(to, range.to);
+        // если есть пересечение, возвращаем 1 интервала, иначе 2
+        if (left <= right) {
+            return new Range[]{new Range(Math.min(this.from, range.from), Math.max(this.to, range.to))};
         }
-        return new Range[]{new Range(min(this.from, anotherRange.from), max(this.to, anotherRange.to))};
+        if (from < range.from) {
+            return new Range[]{new Range(from, to), new Range(range.from, range.to)};
+        }
+
+        return new Range[]{new Range(range.from, range.to), new Range(from, to)};
     }
 
-    public Range[] difference(Range anotherRange) {
+    public Range[] difference(Range range) {
+        double left = Math.max(from, range.from);
+        double right = Math.min(to, range.to);
         // нет пересечений, возвращаем первый интервал
-        if (max(this.from, anotherRange.from) >= min(this.to, anotherRange.to)) {
-            return new Range[]{this};
+        if (left >= right) {
+            return new Range[]{new Range(from, to)};
         }
         // есть пересечения a2>a1, b2>b1 -- [a1,a2]
-        if (this.from < anotherRange.from && anotherRange.to >= this.to) {
-            return new Range[]{new Range(this.from, anotherRange.from)};
+        if (from < range.from && range.to >= to) {
+            return new Range[]{new Range(from, range.from)};
         }
-        //есть пересечения, a2<a1, b2<b1 -- [b2,b1]
-        if (anotherRange.from <= this.from && anotherRange.to < this.to) {
-            return new Range[]{new Range(anotherRange.to, this.to)};
+
+        // есть пересечения, a2<a1, b2<b1 -- [b2,b1]
+        if (range.from <= from && range.to < to) {
+            return new Range[]{new Range(range.to, to)};
         }
-        //есть пересечения, a2>a1, b2<b1 --[a1,a2] и [b2,b1]
-        if (anotherRange.from > this.from && anotherRange.to < this.to) {
-            return new Range[]{new Range(this.from, anotherRange.from), new Range(anotherRange.to, this.to)};
+
+        // есть пересечения, a2>a1, b2<b1 --[a1,a2] и [b2,b1]
+        if (range.from > from && range.to < to) {
+            return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
+
         // иначе второй интервал включает первый - пустой интервал
         return new Range[0];
+    }
+
+    //@Override
+    public String toString() {
+        return "[" + from + "," + to + "]";
     }
 }
