@@ -34,7 +34,7 @@ public class Range {
     }
 
 
-    public Range intersection(Range range) {
+    public Range getIntersection(Range range) {
         // если нет пересечения, возвращаем null, иначе пересечение
         double intersectFrom = Math.max(from, range.from);
         double intersectTo = Math.min(to, range.to);
@@ -46,7 +46,7 @@ public class Range {
         return new Range(intersectFrom, intersectTo);
     }
 
-    public Range[] union(Range range) {
+    public Range[] getUnion(Range range) {
         double intersectFrom = Math.max(from, range.from);
         double intersectTo = Math.min(to, range.to);
 
@@ -62,7 +62,7 @@ public class Range {
         return new Range[]{new Range(range.from, range.to), new Range(from, to)};
     }
 
-    public Range[] difference(Range range) {
+    public Range[] getDifference(Range range) {
         double intersectFrom = Math.max(from, range.from);
         double intersectTo = Math.min(to, range.to);
 
