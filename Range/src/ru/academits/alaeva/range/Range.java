@@ -36,23 +36,25 @@ public class Range {
 
     public Range intersection(Range range) {
         // если нет пересечения, возвращаем null, иначе пересечение
-        double left = Math.max(from, range.from);
-        double right = Math.min(to, range.to);
+        double intersectFrom = Math.max(from, range.from);
+        double intersectTo = Math.min(to, range.to);
 
-        if (left >= right) {
+        if (intersectFrom >= intersectTo) {
             return null;
         }
 
-        return new Range(left, right);
+        return new Range(intersectFrom, intersectTo);
     }
 
     public Range[] union(Range range) {
-        double left = Math.max(from, range.from);
-        double right = Math.min(to, range.to);
-        // если есть пересечение, возвращаем 1 интервала, иначе 2
-        if (left <= right) {
-            return new Range[]{new Range(Math.min(this.from, range.from), Math.max(this.to, range.to))};
+        double intersectFrom = Math.max(from, range.from);
+        double intersectTo = Math.min(to, range.to);
+
+        // если есть пересечение, возвращаем 1 интервал, иначе 2
+        if (intersectFrom <= intersectTo) {
+            return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
         }
+
         if (from < range.from) {
             return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         }
@@ -61,13 +63,15 @@ public class Range {
     }
 
     public Range[] difference(Range range) {
-        double left = Math.max(from, range.from);
-        double right = Math.min(to, range.to);
-        // нет пересечений, возвращаем первый интервал
-        if (left >= right) {
+        double intersectFrom = Math.max(from, range.from);
+        double intersectTo = Math.min(to, range.to);
+
+        // нет пересечения, возвращаем первый интервал
+        if (intersectFrom >= intersectTo) {
             return new Range[]{new Range(from, to)};
         }
-        // есть пересечения a2>a1, b2>b1 -- [a1,a2]
+
+        // есть пересечение a2>a1, b2>b1 -- [a1,a2]
         if (from < range.from && range.to >= to) {
             return new Range[]{new Range(from, range.from)};
         }
@@ -86,8 +90,8 @@ public class Range {
         return new Range[0];
     }
 
-    //@Override
+    @Override
     public String toString() {
-        return "[" + from + "," + to + "]";
+        return "[" + from + ", " + to + "]";
     }
 }
