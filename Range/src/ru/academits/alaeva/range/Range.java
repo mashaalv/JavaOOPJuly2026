@@ -33,25 +33,24 @@ public class Range {
         return from <= point && point <= to;
     }
 
-
     public Range getIntersection(Range range) {
         // если нет пересечения, возвращаем null, иначе пересечение
-        double intersectFrom = Math.max(from, range.from);
-        double intersectTo = Math.min(to, range.to);
+        double intersectionFrom = Math.max(from, range.from);
+        double intersectionTo = Math.min(to, range.to);
 
-        if (intersectFrom >= intersectTo) {
+        if (intersectionFrom >= intersectionTo) {
             return null;
         }
 
-        return new Range(intersectFrom, intersectTo);
+        return new Range(intersectionFrom, intersectionTo);
     }
 
     public Range[] getUnion(Range range) {
-        double intersectFrom = Math.max(from, range.from);
-        double intersectTo = Math.min(to, range.to);
+        double intersectionFrom = Math.max(from, range.from);
+        double intersectionTo = Math.min(to, range.to);
 
         // если есть пересечение, возвращаем 1 интервал, иначе 2
-        if (intersectFrom <= intersectTo) {
+        if (intersectionFrom <= intersectionTo) {
             return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
         }
 
@@ -63,11 +62,11 @@ public class Range {
     }
 
     public Range[] getDifference(Range range) {
-        double intersectFrom = Math.max(from, range.from);
-        double intersectTo = Math.min(to, range.to);
+        double intersectionFrom = Math.max(from, range.from);
+        double intersectionTo = Math.min(to, range.to);
 
         // нет пересечения, возвращаем первый интервал
-        if (intersectFrom >= intersectTo) {
+        if (intersectionFrom >= intersectionTo) {
             return new Range[]{new Range(from, to)};
         }
 

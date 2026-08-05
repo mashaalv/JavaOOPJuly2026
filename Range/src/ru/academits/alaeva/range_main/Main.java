@@ -22,19 +22,19 @@ public class Main {
         Range range1 = new Range(1.5, 10.3);
         Range range2 = new Range(-8, -3);
 
-        //интервалы пересекаются
+        // интервалы пересекаются
         Range range3 = new Range(1, 10);
         Range range4 = new Range(8, 12);
 
-        //интервалы касаются в одной точке
+        // интервалы касаются в одной точке
         Range range5 = new Range(5, 10);
         Range range6 = new Range(10, 12);
 
-        //интервалы один внутри другого
+        // интервалы один внутри другого
         Range range7 = new Range(1, 10);
         Range range8 = new Range(4, 6);
 
-        //равные диапазоны
+        // равные диапазоны
         Range range9 = new Range(4, 6);
 
         // тестирование длины, сеттеров и точки внутри диапазона
