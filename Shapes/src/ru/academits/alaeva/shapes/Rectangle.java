@@ -3,8 +3,8 @@ package ru.academits.alaeva.shapes;
 import java.util.Objects;
 
 public class Rectangle implements Shape {
-    private double width;
-    private double height;
+    private final double width;
+    private final double height;
 
     public Rectangle(double width, double height) {
         this.width = width;
@@ -33,7 +33,8 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(width = " + width + ", height = " + height + ")";
+
+        return "Rectangle(width = " + width + ", height = " + height + ")";
     }
 
     @Override
@@ -41,25 +42,25 @@ public class Rectangle implements Shape {
         if (o == this) {
             return true;
         }
+
         // отсеяли null и объекты других классов
         if (o == null || o.getClass() != getClass()) {
             return false;
         }
+
         Rectangle rectangle = (Rectangle) o;
 
         // проверили равенство ссылок и полей
-        return Double.compare(rectangle.width, width) == 0 && Double.compare(rectangle.height, height) == 0;
+        return rectangle.width == width && rectangle.height == height;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(width, height);
-        /* можно определить hash так
+        // return Objects.hash(width, height);
         int hash = 1;
         final int prime = 37;
         hash = prime * hash + Double.hashCode(width);
         hash = prime * hash + Double.hashCode(height);
         return hash;
-        }       */
     }
 }

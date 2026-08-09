@@ -5,26 +5,48 @@ import ru.academits.alaeva.shapes.*;
 import java.util.Arrays;
 import java.util.Comparator;
 
+class AreaComparator implements Comparator<Shape> {
+    @Override
+    public int compare(Shape s1, Shape s2) {
+        if (s1.getArea() < s2.getArea()) {
+            return 1;
+        } else if (s1.getArea() > s2.getArea()) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+}
+
+class PerimetrComparator implements Comparator<Shape> {
+    @Override
+    public int compare(Shape s1, Shape s2) {
+        if (s1.getPerimeter() < s2.getPerimeter()) {
+            return 1;
+        } else if (s1.getPerimeter() > s2.getPerimeter()) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+}
+
 public class Main {
-    public static Shape getMaxArea(Shape[] shapes) {
+    public static Shape getMaxAreaShape(Shape[] shapes) {
         if (shapes == null || shapes.length == 0) {
             return null;
         }
-
         Shape[] shapesCopy = Arrays.copyOf(shapes, shapes.length);
-        //ссылка на метод: shape -> shape.getArea()
-        Arrays.sort(shapesCopy, Comparator.comparingDouble(Shape::getArea).reversed());
+        Arrays.sort(shapesCopy, new AreaComparator());
         return shapesCopy[0];
     }
 
-    public static Shape getSecondMaxPerimeter(Shape[] shapes) {
+    public static Shape getSecondMaxPerimeterShape(Shape[] shapes) {
         if (shapes == null || shapes.length < 2) {
             return null;
         }
-
         Shape[] shapesCopy = Arrays.copyOf(shapes, shapes.length);
-        //через ссылку на метод: shape -> shape.getArea()
-        Arrays.sort(shapesCopy, Comparator.comparingDouble(Shape::getPerimeter).reversed());
+        Arrays.sort(shapesCopy, new PerimetrComparator());
         return shapesCopy[1];
     }
 
@@ -32,13 +54,13 @@ public class Main {
         // t1!=t2
         Triangle t1 = new Triangle(1, 1, 4, 0, 2, 3);
         Triangle t2 = new Triangle(1, 1, 5, 1, 3, 4);
-        //c1 = c2
+        // c1 = c2
         Circle c1 = new Circle(4);
         Circle c2 = new Circle(4);
         // r1 = r2
         Rectangle r1 = new Rectangle(10, 20);
         Rectangle r2 = new Rectangle(10, 20);
-        //s1 !=s2
+        // s1 !=s2
         Square s1 = new Square(15);
         Square s2 = new Square(3.5);
         // Проверка toString
@@ -71,28 +93,28 @@ public class Main {
                 new Circle(2),// P>12, S>12
                 new Circle(5)// P>30, S>75
         };
+
         // ===============Часть 2: максимальная площадь и 2 макс. периметр
-        Shape maxAreaShape = getMaxArea(shapes);
-        Shape maxPerimeter = getSecondMaxPerimeter(shapes);
-        System.out.println("Фигура с максимальной площадью: " + maxAreaShape);
-        System.out.println("Фигура с вторым по величине периметром: " + maxPerimeter);
-        System.out.println("getMaxArea если передали null: " + getMaxArea(null));
-        System.out.println("getMaxArea для пустого массива: " + getMaxArea(new Shape[0]));
-        System.out.println("getSecondMaxPerimeter если передали массив из одного элемента: " + getSecondMaxPerimeter(new Shape[]{r1}));
-        //==============Часть 3: проверка хэш код и equals
-        System.out.println("t1.equals(t2): " + t1.equals(t2));//false
+        System.out.println("Фигура с максимальной площадью: " + (getMaxAreaShape(shapes) != null ? getMaxAreaShape(shapes) : "нет данных."));
+        System.out.println("Фигура с вторым по величине периметром: " + (getSecondMaxPerimeterShape(shapes) != null ? getSecondMaxPerimeterShape(shapes) : "нет данных."));
+        System.out.println("getMaxAreaShape если передали null: " + (getMaxAreaShape(null) != null ? getMaxAreaShape(null) : "нет данных."));
+        System.out.println("getMaxAreaShape для пустого массива: " + (getMaxAreaShape(new Shape[0]) != null ? getMaxAreaShape(new Shape[0]) : "нет данных."));
+        System.out.println("getSecondMaxPerimeterShape если передали массив из одного элемента: " + (getSecondMaxPerimeterShape(new Shape[]{r1}) != null ? getSecondMaxPerimeterShape(new Shape[]{r1}) : "нет данных."));
+
+        //  ==============Часть 3: проверка хэш код и equals
+        System.out.println("t1.equals(t2): " + t1.equals(t2));// false
         System.out.println("Хэш-коды t1 и t2 совпадают " + (t1.hashCode() == t2.hashCode()));
 
-        System.out.println("r1.equals(r2): " + r1.equals(r2));//true
-        System.out.println("Хэш-коды r1 и r2 совпадают " + (r1.hashCode() == r2.hashCode()));
+        System.out.println("r1.equals(r2): " + r1.equals(r2));// true
+        System.out.println("Хэш-коды r1 и r2 совпадают " + (r1.hashCode() == r2.hashCode()));// 76547009
 
-        System.out.println("c1.equals(c2): " + c1.equals(c2));//true
-        System.out.println("Хэш-коды c1 и c2 совпадают " + (c1.hashCode() == c2.hashCode()));
+        System.out.println("c1.equals(c2): " + c1.equals(c2));// true
+        System.out.println("Хэш-коды c1 и c2 совпадают " + (c1.hashCode() == c2.hashCode()));// 1074790437 через objects 1074790431. Без перегрузки false 1023892928
 
-        System.out.println("s1.equals(s2): " + s1.equals(s2));//false
+        System.out.println("s1.equals(s2): " + s1.equals(s2));// false
         System.out.println("Хэш-коды s1 и s2 совпадают " + (s1.hashCode() == s2.hashCode()));
 
-        System.out.println("t1.equals(null): " + t1.equals(null));//false
-        System.out.println("t1.equals(t1): " + t1.equals(t1));//true
+        System.out.println("t1.equals(null): " + t1.equals(null));// false
+        System.out.println("t1.equals(t1): " + t1.equals(t1));// true
     }
 }

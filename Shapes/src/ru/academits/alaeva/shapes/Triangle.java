@@ -3,12 +3,12 @@ package ru.academits.alaeva.shapes;
 import java.util.Objects;
 
 public class Triangle implements Shape {
-    private double x1 = 0;
-    private double y1 = 0;
-    private double x2 = 0;
-    private double y2 = 0;
-    private double x3 = 0;
-    private double y3 = 0;
+    private final double x1;
+    private final double y1;
+    private final double x2;
+    private final double y2;
+    private final double x3;
+    private final double y3;
 
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
         this.x1 = x1;
@@ -17,6 +17,30 @@ public class Triangle implements Shape {
         this.y2 = y2;
         this.x3 = x3;
         this.y3 = y3;
+    }
+
+    public double getX1() {
+        return x1;
+    }
+
+    public double getY1() {
+        return y1;
+    }
+
+    public double getX2() {
+        return x2;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
+    public double getX3() {
+        return x3;
+    }
+
+    public double getY3() {
+        return y3;
     }
 
     @Override
@@ -34,18 +58,23 @@ public class Triangle implements Shape {
         return 0.5 * Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
     }
 
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
+
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+
+    }
+
     @Override
     public double getPerimeter() {
-        double side1 = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        double side2 = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-        double side3 = Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1));
+        double side1 = getSideLength(x1, y1, x2, y2);
+        double side2 = getSideLength(x3, y3, x2, y2);
+        double side3 = getSideLength(x1, y1, x3, y3);
         return side1 + side2 + side3;
     }
 
     @Override
     public String toString() {
-        //return getClass().getSimpleName() + "(x1 = " + x1 + ", y1 = " + y1 + "), " + "(x2 = " + x2 + ", y2 = " + y2 + "), " + "(x3= " + x3 + ", y3 = " + y3 + ")";
-        return getClass().getSimpleName() + "{(" + x1 + "," + y1 + "), (" + x2 + "," + y2 + "), (" + x3 + "," + y3 + ")}";
+        return "Triangle{(" + x1 + "," + y1 + "), (" + x2 + "," + y2 + "), (" + x3 + "," + y3 + ")}";
     }
 
     @Override
@@ -53,22 +82,23 @@ public class Triangle implements Shape {
         if (o == this) {
             return true;
         }
+
         // отсеяли null и объекты других классов
         if (o == null || o.getClass() != getClass()) {
             return false;
         }
+
         Triangle triangle = (Triangle) o;
 
         // проверили равенство ссылок и полей
-        return Double.compare(triangle.x1, x1) == 0 && Double.compare(triangle.y1, y1) == 0
-                && Double.compare(triangle.x2, x2) == 0 && Double.compare(triangle.y2, y2) == 0
-                && Double.compare(triangle.x3, x3) == 0 && Double.compare(triangle.y3, y3) == 0;
+        return x1 == triangle.x1 && y1 == triangle.y1 &&
+                x2 == triangle.x2 && y2 == triangle.y2 &&
+                x3 == triangle.x3 && y3 == triangle.y3;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x1, y1, x2, y2, x3, y3);
-        /* можно определить hash так
+        // return Objects.hash(x1, y1, x2, y2, x3, y3);
         int hash = 1;
         final int prime = 37;
         hash = prime * hash + Double.hashCode(x1);
@@ -78,6 +108,5 @@ public class Triangle implements Shape {
         hash = prime * hash + Double.hashCode(x3);
         hash = prime * hash + Double.hashCode(y3);
         return hash;
-            }       */
     }
 }

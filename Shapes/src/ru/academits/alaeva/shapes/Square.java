@@ -3,10 +3,14 @@ package ru.academits.alaeva.shapes;
 import java.util.Objects;
 
 public class Square implements Shape {
-    private double side;//Final??????
+    private final double side;
 
     public Square(double side) {
         this.side = side;
+    }
+
+    public double getSide() {
+        return side;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class Square implements Shape {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(side = " + side + ")";
+        return "Square(side = " + side + ")";
     }
 
     @Override
@@ -39,18 +43,23 @@ public class Square implements Shape {
         if (o == this) {
             return true;
         }
+
         // отсеяли null и объекты других классов
         if (o == null || o.getClass() != getClass()) {
             return false;
         }
+
         // привели объект к Square
         Square square = (Square) o;
         // проверили равенство ссылок и полей
-        return Double.compare(square.side, side) == 0;
+        return square.side == side;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(side);
+        final int prime = 37;
+        int hash = 1;
+        hash = prime * hash + Double.hashCode(side);
+        return hash;
     }
 }

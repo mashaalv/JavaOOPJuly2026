@@ -5,10 +5,14 @@ import ru.academits.alaeva.shapes_main.Main;
 import java.util.Objects;
 
 public class Circle implements Shape {
-    private double radius;
+    private final double radius;
 
     public Circle(double radius) {
         this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(radius = " + radius + ")";
+        return "Circle(radius = " + radius + ")";
     }
 
     @Override
@@ -41,22 +45,23 @@ public class Circle implements Shape {
         if (o == this) {
             return true;
         }
+
         // отсеяли null и объекты других классов
         if (o == null || o.getClass() != getClass()) {
             return false;
         }
+
         // привели объект к Circle
         Circle circle = (Circle) o;
         // проверили равенство ссылок и полей
-        return Double.compare(circle.radius, radius) == 0;
+        return circle.radius==radius;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(radius);
-        /* можно определить hash так
+        // hashCode - нужно реализовать без использования Objects.hash(radius), т.к. этот метод создает массив
         final int prime = 37;
         int hash = 1;
-        hash = prime * hash + Double.hashCode(radius);    */
+        return hash = prime * hash + Double.hashCode(radius);
     }
 }
