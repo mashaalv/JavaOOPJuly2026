@@ -3,84 +3,63 @@ package ru.academits.alaeva.shapes_main;
 import ru.academits.alaeva.shapes.*;
 
 import java.util.Arrays;
-import java.util.Comparator;
-
-class AreaComparator implements Comparator<Shape> {
-    @Override
-    public int compare(Shape s1, Shape s2) {
-        if (s1.getArea() < s2.getArea()) {
-            return 1;
-        } else if (s1.getArea() > s2.getArea()) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
-}
-
-class PerimetrComparator implements Comparator<Shape> {
-    @Override
-    public int compare(Shape s1, Shape s2) {
-        if (s1.getPerimeter() < s2.getPerimeter()) {
-            return 1;
-        } else if (s1.getPerimeter() > s2.getPerimeter()) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
-}
 
 public class Main {
     public static Shape getMaxAreaShape(Shape[] shapes) {
         if (shapes == null || shapes.length == 0) {
             return null;
         }
+
         Shape[] shapesCopy = Arrays.copyOf(shapes, shapes.length);
-        Arrays.sort(shapesCopy, new AreaComparator());
-        return shapesCopy[0];
+        Arrays.sort(shapesCopy, new ShapeAreaComparator());
+        return shapesCopy[shapesCopy.length - 1];
     }
 
     public static Shape getSecondMaxPerimeterShape(Shape[] shapes) {
         if (shapes == null || shapes.length < 2) {
             return null;
         }
+
         Shape[] shapesCopy = Arrays.copyOf(shapes, shapes.length);
-        Arrays.sort(shapesCopy, new PerimetrComparator());
-        return shapesCopy[1];
+        Arrays.sort(shapesCopy, new ShapePerimeterComparator());
+        return shapesCopy[shapesCopy.length - 2];
     }
 
     public static void main(String[] args) {
-        // t1!=t2
-        Triangle t1 = new Triangle(1, 1, 4, 0, 2, 3);
-        Triangle t2 = new Triangle(1, 1, 5, 1, 3, 4);
-        // c1 = c2
-        Circle c1 = new Circle(4);
-        Circle c2 = new Circle(4);
-        // r1 = r2
-        Rectangle r1 = new Rectangle(10, 20);
-        Rectangle r2 = new Rectangle(10, 20);
-        // s1 !=s2
-        Square s1 = new Square(15);
-        Square s2 = new Square(3.5);
+        // triangle1!=triangle2
+        Triangle triangle1 = new Triangle(1, 1, 4, 0, 2, 3);
+        Triangle triangle2 = new Triangle(1, 1, 5, 1, 3, 4);
+
+        // circle1 = circle2
+        Circle circle1 = new Circle(4);
+        Circle circle2 = new Circle(4);
+
+        // rectangle1 = rectangle2
+        Rectangle rectangle1 = new Rectangle(10, 20);
+        Rectangle rectangle2 = new Rectangle(10, 20);
+
+        // square1 !=square2
+        Square square1 = new Square(15);
+        Square square2 = new Square(3.5);
+
         // Проверка toString
-        System.out.println("Окружность c1 - " + c1);
-        System.out.println("Ширина = " + c1.getWidth() + " высота = " + c1.getHeight());
+        System.out.println("Окружность circle1 - " + circle1);
+        System.out.println("Ширина = " + circle1.getWidth() + " высота = " + circle1.getHeight());
 
-        System.out.println("Прямоугольник r1 - " + r1);
-        System.out.println("Ширина = " + r1.getWidth() + " высота = " + r1.getHeight());
+        System.out.println("Прямоугольник rectangle1 - " + rectangle1);
+        System.out.println("Ширина = " + rectangle1.getWidth() + " высота = " + rectangle1.getHeight());
 
-        System.out.println("Квадрат s1 - " + s1);
-        System.out.println("Ширина = " + s1.getWidth() + " высота = " + s1.getHeight());
+        System.out.println("Квадрат square1 - " + square1);
+        System.out.println("Ширина = " + square1.getWidth() + " высота = " + square1.getHeight());
 
-        System.out.println("Треугольник t1 - " + t1);
-        System.out.println("Ширина = " + t1.getWidth() + " высота =" + t1.getHeight());
+        System.out.println("Треугольник triangle1 - " + triangle1);
+        System.out.println("Ширина = " + triangle1.getWidth() + " высота =" + triangle1.getHeight());
 
-        System.out.printf("Площадь треугольника: t1, %.2f, периметр треугольника: %.2f%n", t1.getArea(), t1.getPerimeter());
-        System.out.printf("Площадь треугольника: t2, %.2f, периметр треугольника: %.2f%n", t2.getArea(), t2.getPerimeter());
-        System.out.printf("Площадь круга: c1, %.2f, периметр окружности: %.2f%n", c1.getArea(), c1.getPerimeter());
-        System.out.printf("Площадь прямоугольника: r1, %.2f, периметр треугольника: %.2f%n", r1.getArea(), r1.getPerimeter());
-        System.out.printf("Площадь квадрата: s1, %.2f, периметр квадрата: %.2f%n", s1.getArea(), s1.getPerimeter());
+        System.out.printf("Площадь треугольника: triangle1, %.2f, периметр треугольника: %.2f%n", triangle1.getArea(), triangle1.getPerimeter());
+        System.out.printf("Площадь треугольника: triangle2, %.2f, периметр треугольника: %.2f%n", triangle2.getArea(), triangle2.getPerimeter());
+        System.out.printf("Площадь круга: circle1, %.2f, периметр окружности: %.2f%n", circle1.getArea(), circle1.getPerimeter());
+        System.out.printf("Площадь прямоугольника: rectangle1, %.2f, периметр треугольника: %.2f%n", rectangle1.getArea(), rectangle1.getPerimeter());
+        System.out.printf("Площадь квадрата: square1, %.2f, периметр квадрата: %.2f%n", square1.getArea(), square1.getPerimeter());
 
         // массив фигур
         Shape[] shapes = {
@@ -95,26 +74,34 @@ public class Main {
         };
 
         // ===============Часть 2: максимальная площадь и 2 макс. периметр
-        System.out.println("Фигура с максимальной площадью: " + (getMaxAreaShape(shapes) != null ? getMaxAreaShape(shapes) : "нет данных."));
-        System.out.println("Фигура с вторым по величине периметром: " + (getSecondMaxPerimeterShape(shapes) != null ? getSecondMaxPerimeterShape(shapes) : "нет данных."));
-        System.out.println("getMaxAreaShape если передали null: " + (getMaxAreaShape(null) != null ? getMaxAreaShape(null) : "нет данных."));
-        System.out.println("getMaxAreaShape для пустого массива: " + (getMaxAreaShape(new Shape[0]) != null ? getMaxAreaShape(new Shape[0]) : "нет данных."));
-        System.out.println("getSecondMaxPerimeterShape если передали массив из одного элемента: " + (getSecondMaxPerimeterShape(new Shape[]{r1}) != null ? getSecondMaxPerimeterShape(new Shape[]{r1}) : "нет данных."));
+        Shape maxAreaShape = getMaxAreaShape(shapes);
+        System.out.println("Фигура с максимальной площадью: " + (maxAreaShape != null ?maxAreaShape : "нет данных."));
 
+        Shape secondMaxPerimeterShape = getSecondMaxPerimeterShape(shapes);
+        System.out.println("Фигура с вторым по величине периметром: " + (secondMaxPerimeterShape != null ? secondMaxPerimeterShape : "нет данных."));
+
+        Shape maxAreaShapeNull = getMaxAreaShape(null);
+        System.out.println("getMaxAreaShape если передали null: " + (maxAreaShapeNull != null ? maxAreaShapeNull : "нет данных."));
+
+        Shape maxAreaShapeEmpty = getMaxAreaShape(new Shape[0]);
+        System.out.println("getMaxAreaShape для пустого массива: " + (maxAreaShapeEmpty != null ? maxAreaShapeEmpty : "нет данных."));
+
+        Shape secondMaxPerimeterSingleElement = getSecondMaxPerimeterShape(new Shape[]{rectangle1});
+        System.out.println("getSecondMaxPerimeterShape если передали массив из одного элемента: " + (secondMaxPerimeterSingleElement != null ? secondMaxPerimeterSingleElement : "нет данных."));
         //  ==============Часть 3: проверка хэш код и equals
-        System.out.println("t1.equals(t2): " + t1.equals(t2));// false
-        System.out.println("Хэш-коды t1 и t2 совпадают " + (t1.hashCode() == t2.hashCode()));
+        System.out.println("triangle1.equals(triangle2): " + triangle1.equals(triangle2));// false
+        System.out.println("Хэш-коды triangle1 и triangle2 совпадают " + (triangle1.hashCode() == triangle2.hashCode()));
 
-        System.out.println("r1.equals(r2): " + r1.equals(r2));// true
-        System.out.println("Хэш-коды r1 и r2 совпадают " + (r1.hashCode() == r2.hashCode()));// 76547009
+        System.out.println("rectangle1.equals(rectangle2): " + rectangle1.equals(rectangle2));// true
+        System.out.println("Хэш-коды rectangle1 и rectangle2 совпадают " + (rectangle1.hashCode() == rectangle2.hashCode()));// 76547009
 
-        System.out.println("c1.equals(c2): " + c1.equals(c2));// true
-        System.out.println("Хэш-коды c1 и c2 совпадают " + (c1.hashCode() == c2.hashCode()));// 1074790437 через objects 1074790431. Без перегрузки false 1023892928
+        System.out.println("circle1.equals(circle2): " + circle1.equals(circle2));// true
+        System.out.println("Хэш-коды circle1 и circle2 совпадают " + (circle1.hashCode() == circle2.hashCode()));// 1074790437 через objects 1074790431. Без перегрузки false 1023892928
 
-        System.out.println("s1.equals(s2): " + s1.equals(s2));// false
-        System.out.println("Хэш-коды s1 и s2 совпадают " + (s1.hashCode() == s2.hashCode()));
+        System.out.println("square1.equals(square2): " + square1.equals(square2));// false
+        System.out.println("Хэш-коды square1 и square2 совпадают " + (square1.hashCode() == square2.hashCode()));
 
-        System.out.println("t1.equals(null): " + t1.equals(null));// false
-        System.out.println("t1.equals(t1): " + t1.equals(t1));// true
+        System.out.println("triangle1.equals(null): " + triangle1.equals(null));// false
+        System.out.println("triangle1.equals(triangle1): " + triangle1.equals(triangle1));// true
     }
 }

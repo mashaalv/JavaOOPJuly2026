@@ -2,8 +2,6 @@ package ru.academits.alaeva.shapes;
 
 import ru.academits.alaeva.shapes_main.Main;
 
-import java.util.Objects;
-
 public class Circle implements Shape {
     private final double radius;
 
@@ -54,7 +52,7 @@ public class Circle implements Shape {
         // привели объект к Circle
         Circle circle = (Circle) o;
         // проверили равенство ссылок и полей
-        return circle.radius==radius;
+        return circle.radius == radius;
     }
 
     @Override
@@ -62,6 +60,7 @@ public class Circle implements Shape {
         // hashCode - нужно реализовать без использования Objects.hash(radius), т.к. этот метод создает массив
         final int prime = 37;
         int hash = 1;
-        return hash = prime * hash + Double.hashCode(radius);
+        hash = prime * hash + Double.hashCode(radius);
+        return hash;
     }
 }

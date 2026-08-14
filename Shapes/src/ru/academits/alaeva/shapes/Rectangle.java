@@ -1,7 +1,5 @@
 package ru.academits.alaeva.shapes;
 
-import java.util.Objects;
-
 public class Rectangle implements Shape {
     private final double width;
     private final double height;
@@ -33,7 +31,6 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-
         return "Rectangle(width = " + width + ", height = " + height + ")";
     }
 
@@ -56,7 +53,6 @@ public class Rectangle implements Shape {
 
     @Override
     public int hashCode() {
-        // return Objects.hash(width, height);
         int hash = 1;
         final int prime = 37;
         hash = prime * hash + Double.hashCode(width);

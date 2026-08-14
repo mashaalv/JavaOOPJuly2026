@@ -1,7 +1,5 @@
 package ru.academits.alaeva.shapes;
 
-import java.util.Objects;
-
 public class Triangle implements Shape {
     private final double x1;
     private final double y1;
@@ -59,9 +57,7 @@ public class Triangle implements Shape {
     }
 
     private static double getSideLength(double x1, double y1, double x2, double y2) {
-
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-
     }
 
     @Override
@@ -69,12 +65,13 @@ public class Triangle implements Shape {
         double side1 = getSideLength(x1, y1, x2, y2);
         double side2 = getSideLength(x3, y3, x2, y2);
         double side3 = getSideLength(x1, y1, x3, y3);
+
         return side1 + side2 + side3;
     }
 
     @Override
     public String toString() {
-        return "Triangle{(" + x1 + "," + y1 + "), (" + x2 + "," + y2 + "), (" + x3 + "," + y3 + ")}";
+        return "Triangle{(" + x1 + ", " + y1 + "), (" + x2 + ", " + y2 + "), (" + x3 + ", " + y3 + ")}";
     }
 
     @Override
@@ -91,14 +88,13 @@ public class Triangle implements Shape {
         Triangle triangle = (Triangle) o;
 
         // проверили равенство ссылок и полей
-        return x1 == triangle.x1 && y1 == triangle.y1 &&
-                x2 == triangle.x2 && y2 == triangle.y2 &&
-                x3 == triangle.x3 && y3 == triangle.y3;
+        return x1 == triangle.x1 && y1 == triangle.y1
+                && x2 == triangle.x2 && y2 == triangle.y2
+                && x3 == triangle.x3 && y3 == triangle.y3;
     }
 
     @Override
     public int hashCode() {
-        // return Objects.hash(x1, y1, x2, y2, x3, y3);
         int hash = 1;
         final int prime = 37;
         hash = prime * hash + Double.hashCode(x1);

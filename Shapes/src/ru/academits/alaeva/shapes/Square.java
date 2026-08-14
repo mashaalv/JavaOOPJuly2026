@@ -1,7 +1,5 @@
 package ru.academits.alaeva.shapes;
 
-import java.util.Objects;
-
 public class Square implements Shape {
     private final double side;
 
