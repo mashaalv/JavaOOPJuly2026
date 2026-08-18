@@ -1,4 +1,6 @@
-package ru.academits.alaeva.shapes;
+package ru.academits.alaeva.comparators;
+
+import ru.academits.alaeva.shapes.Shape;
 
 import java.util.Comparator;
 
@@ -8,6 +10,3 @@ public class ShapePerimeterComparator implements Comparator<Shape> {
         return Double.compare(shape1.getPerimeter(), shape2.getPerimeter());
     }
 }
-
-
-

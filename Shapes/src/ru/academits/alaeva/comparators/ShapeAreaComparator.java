@@ -1,4 +1,6 @@
-package ru.academits.alaeva.shapes;
+package ru.academits.alaeva.comparators;
+
+import ru.academits.alaeva.shapes.Shape;
 
 import java.util.Comparator;
 

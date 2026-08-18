@@ -1,5 +1,7 @@
 package ru.academits.alaeva.shapes_main;
 
+import ru.academits.alaeva.comparators.ShapeAreaComparator;
+import ru.academits.alaeva.comparators.ShapePerimeterComparator;
 import ru.academits.alaeva.shapes.*;
 
 import java.util.Arrays;
@@ -73,9 +75,9 @@ public class Main {
                 new Circle(5)// P>30, S>75
         };
 
-        // ===============Часть 2: максимальная площадь и 2 макс. периметр
+        // Часть 2: максимальная площадь и 2 макс. периметр
         Shape maxAreaShape = getMaxAreaShape(shapes);
-        System.out.println("Фигура с максимальной площадью: " + (maxAreaShape != null ?maxAreaShape : "нет данных."));
+        System.out.println("Фигура с максимальной площадью: " + (maxAreaShape != null ? maxAreaShape : "нет данных."));
 
         Shape secondMaxPerimeterShape = getSecondMaxPerimeterShape(shapes);
         System.out.println("Фигура с вторым по величине периметром: " + (secondMaxPerimeterShape != null ? secondMaxPerimeterShape : "нет данных."));
@@ -88,7 +90,7 @@ public class Main {
 
         Shape secondMaxPerimeterSingleElement = getSecondMaxPerimeterShape(new Shape[]{rectangle1});
         System.out.println("getSecondMaxPerimeterShape если передали массив из одного элемента: " + (secondMaxPerimeterSingleElement != null ? secondMaxPerimeterSingleElement : "нет данных."));
-        //  ==============Часть 3: проверка хэш код и equals
+        // Часть 3: проверка хэш код и equals
         System.out.println("triangle1.equals(triangle2): " + triangle1.equals(triangle2));// false
         System.out.println("Хэш-коды triangle1 и triangle2 совпадают " + (triangle1.hashCode() == triangle2.hashCode()));
 
