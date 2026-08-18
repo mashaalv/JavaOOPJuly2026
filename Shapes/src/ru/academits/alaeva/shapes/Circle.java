@@ -1,7 +1,5 @@
 package ru.academits.alaeva.shapes;
 
-//import ru.academits.alaeva.shapes_main.Main;
-
 public class Circle implements Shape {
     private final double radius;
 
