@@ -3,38 +3,64 @@ package ru.academits.alaeva.vector_main;
 import ru.academits.alaeva.vector.Vector;
 
 public class Main {
-    public static void main() {
-        // обработка исключения, тест
+    public static void main(String[] args) {
+        // тест - обработка исключения
         try {
-            Vector vector1 = new Vector(-1);
-
+            Vector vector = new Vector(-1);
 
         } catch (IllegalArgumentException e) {
             System.out.println("Поймали исключение: " + e.getMessage());
-
         }
 
-        Vector vector2 = new Vector(5);
-        System.out.println("Размерность вектора vector2 = " + vector2.getSize());
+        Vector vector1 = new Vector(2); // тест конструктор1
+        System.out.println("Vector 1:  " + vector1);
 
-        double[] components3 = {1, 2, 3, 8, 5};
-        double[] components4 = new double[6];
-        Vector vector3 = new Vector(components3);
-        System.out.println(vector3);
+        double[] components2 = {1, 2, 100};
+        Vector vector2 = new Vector(components2);// тест конструктора 3
+        Vector vector2Copy = new Vector(vector2);// тест конструктора 2
+        System.out.println("Vector 2:  " + vector2);
+        System.out.println("Vector 2 copy:  " + vector2Copy);
 
-        vector3.setComponent(4, 666);
-        System.out.println(vector3.getComponent(4));
+        vector2.setComponent(2, 3);// setComponent
+        System.out.println("Вторая компонента vector2 после set: " + vector2.getComponent(2));// getComponent
+        System.out.println("Vector 2:  " + vector2);
 
-        Vector v1 = new Vector(5, new double[]{1, 2, 3});
-        System.out.println(v1); // {1.0, 2.0, 3.0, 0.0, 0.0}
+        Vector vector3 = new Vector(2, new double[]{1, 2});// тест конструктор 4
+        System.out.println("Vector 3:  " + vector3);// {1.0, 2.0}
 
-        Vector v2 = new Vector(3, new double[]{1, 2, 3, 4, 5});
-        System.out.println(v2); // {1.0, 2.0, 3.0}
+        // Vector v1 = new Vector(-1, components2); // тест исключение
+        // Vector v2 = new Vector(3, null); // тест исключение
 
-        //Vector v3 = new Vector(-1, new double[]{1, 2}); // исключение
-        //Vector v4 = new Vector(3, null); // исключение
-        //Нетстатическое сложение веторов
-        v1.add(v2);
-        System.out.println(v1);
+        // Нестатическое сложение векторов
+        vector2.add(vector3);
+        System.out.println("vector2.add(vector3) " + vector2);
+
+        // Нестатическое вычитание векторов
+        System.out.println("Vector 2:  " + vector2);
+        vector3.subtract(vector2);
+        System.out.println("vector3.substract(vector2): " + vector3);
+
+        // Нестатический метод - умножение на скаляр
+        System.out.println("Vector 2:  " + vector2);
+        vector2.multiply(3.1);
+        System.out.println("vector2.multiply(3): " + vector2);
+
+        // Нестатический метод - reverse
+        vector3.reverse();
+        System.out.println("vector3.reverse(): " + vector3);
+
+        // equals и hashCode
+        Vector vector4 = new Vector(new double[]{1, 2, 3});
+        Vector vector5 = new Vector(new double[]{1, 2});
+        System.out.println(vector4.equals(vector3)); // true
+        System.out.println(vector4.equals(vector5)); // false
+        System.out.println(vector4.hashCode() == vector3.hashCode()); // true
+
+        // статические методы
+        System.out.println("vector4: " + vector4);
+        System.out.println("Сумма векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.sum(vector5, vector5));
+        // System.out.println("Исключение: " + Vector.sum(vector5, null));
+        System.out.println("Вычитание векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.subtract(vector4, vector5));
+        System.out.println("Скалярное произведение векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getScalarProduct(vector5, vector4));
     }
 }
