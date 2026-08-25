@@ -12,24 +12,6 @@ public class Vector {
         components = new double[n];// заполнен нолями
     }
 
-    // получение компоненты по индексу
-    public double getComponent(int i) {
-        if (i < 0 || i >= components.length) {
-            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне [ 0, " + (components.length - 1) + "]");
-        }
-
-        return components[i];
-    }
-
-    //установка компоненты по индексу
-    public void setComponent(int i, double value) {
-        if (i < 0 || i >= components.length) {
-            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне [0, " + (components.length - 1) + "]");
-        }
-
-        components[i] = value;
-    }
-
     // конструктор копирования
     public Vector(Vector vector) {
         // вызов конструктора через this - Vector(n)
@@ -46,6 +28,7 @@ public class Vector {
         if (components == null) {
             throw new IllegalArgumentException("Массив не может быть null!");
         }
+
         // вызов конструктора через this
         this(components.length);
 
@@ -67,9 +50,25 @@ public class Vector {
         // вызов конструктора через this, создаем вектор длины n
         this(n);
 
-        for (int i = 0; i < (Math.min(n, components.length)); i++) {
-            this.components[i] = components[i];
+        System.arraycopy(components, 0, this.components, 0, Math.min(n, components.length));
+    }
+
+    // получение компоненты по индексу
+    public double getComponent(int i) {
+        if (i < 0 || i >= components.length) {
+            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне [ 0, " + (components.length - 1) + "]");
         }
+
+        return components[i];
+    }
+
+    //установка компоненты по индексу
+    public void setComponent(int i, double value) {
+        if (i < 0 || i >= components.length) {
+            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне [0, " + (components.length - 1) + "]");
+        }
+
+        components[i] = value;
     }
 
     // Метод getSize() для получения размерности вектора (через полe length массива components)
@@ -110,6 +109,7 @@ public class Vector {
             double vectorComponents = i < vectorSize ? vector.components[i] : 0.0;
             newComponents[i] = thisComponents + vectorComponents;
         }
+
         this.components = newComponents;
     }
 
@@ -135,7 +135,7 @@ public class Vector {
     public void multiply(double scalarValue) {
         int size = getSize();
         for (int i = 0; i < size; i++) {
-            components[i] = scalarValue * components[i];
+            components[i] *= scalarValue;
         }
     }
 
@@ -144,6 +144,15 @@ public class Vector {
         for (int i = 0; i < size; i++) {
             components[i] = -components[i];
         }
+    }
+
+    // Получение длины вектора
+    public double getLength() {
+        double sum = 0.0;
+        for (double component : components) {
+            sum += component * component;
+        }
+        return Math.sqrt(sum);
     }
 
     // переопределить equals и hashcode
