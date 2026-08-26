@@ -1,56 +1,50 @@
 package ru.academits.alaeva.vector;
 
+import java.util.Arrays;
+
 public class Vector {
     private double[] components;
 
-    // Vector(n) – размерность n, все компоненты равны 0
-    public Vector(int n) {
-        if (n <= 0) {
-            throw new IllegalArgumentException("Размерность вектора n должна быть >0, передано " + n);
+    // Vector(size) – размерность size, все компоненты равны 0
+    public Vector(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Размерность вектора size должна быть >0, передано " + size);
         }
 
-        components = new double[n];// заполнен нолями
+        components = new double[size];// заполнен нолями
     }
 
     // конструктор копирования
     public Vector(Vector vector) {
-        // вызов конструктора через this - Vector(n)
-        int size = vector.getSize();
-        this(size);
-
-        for (int i = 0; i < size; i++) {
-            components[i] = vector.components[i];
+        if (vector == null) {
+            throw new IllegalArgumentException("Копируемы вектор не может быть null, передано " + vector);
         }
+
+        components = Arrays.copyOf(vector.components, vector.components.length);
     }
 
     // Vector(double[]) – заполнение вектора значениями из массива
     public Vector(double[] components) {
         if (components == null) {
-            throw new IllegalArgumentException("Массив не может быть null!");
+            throw new IllegalArgumentException("Массив не может быть null, передано " + Arrays.toString(components));
         }
 
-        // вызов конструктора через this
-        this(components.length);
-
-        for (int i = 0; i < components.length; i++) {
-            this.components[i] = components[i];
-        }
+        this.components = Arrays.copyOf(components, components.length);
     }
-
-    // Vector(n, double[]) – заполнение вектора значениями из массива. Если длина массива меньше n, то считать что в остальных компонентах 0
-    public Vector(int n, double[] components) {
-        if (n <= 0) {
-            throw new IllegalArgumentException("n должно быть положительным");
+/// ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Vector(size, double[]) – заполнение вектора значениями из массива. Если длина массива меньше size, то считать что в остальных компонентах 0
+    public Vector(int size, double[] components) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("size должно быть положительным" + size);
         }
 
         if (components == null) {
-            throw new IllegalArgumentException("Массив не может быть null!");
+            throw new IllegalArgumentException("Массив не может быть null!" + Arrays.toString(components));
         }
 
-        // вызов конструктора через this, создаем вектор длины n
-        this(n);
+        this.components = new double[size];
 
-        System.arraycopy(components, 0, this.components, 0, Math.min(n, components.length));
+        System.arraycopy(components, 0, this.components, 0, Math.min(size, components.length));
     }
 
     // получение компоненты по индексу
