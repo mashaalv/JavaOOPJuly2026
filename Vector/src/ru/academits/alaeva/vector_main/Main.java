@@ -18,7 +18,7 @@ public class Main {
         double[] components2 = {1, 2, 100};
         Vector vector2 = new Vector(components2);// тест конструктора 3
         Vector vector2Copy = new Vector(vector2);// тест конструктора 2
-        System.out.println("Vector 2:  " + vector2 + ", длина вектора 2 " + vector2.getLength());
+        System.out.println("Vector 2:  " + vector2 + ", длина вектора = " + vector2.getLength());
         System.out.println("Vector 2 copy:  " + vector2Copy);
 
         vector2.setComponent(2, 3);// setComponent

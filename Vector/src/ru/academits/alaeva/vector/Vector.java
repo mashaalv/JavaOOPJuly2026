@@ -31,7 +31,7 @@ public class Vector {
 
         this.components = Arrays.copyOf(components, components.length);
     }
-/// ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // Vector(size, double[]) – заполнение вектора значениями из массива. Если длина массива меньше size, то считать что в остальных компонентах 0
     public Vector(int size, double[] components) {
         if (size <= 0) {
@@ -73,18 +73,19 @@ public class Vector {
     // метод toString(), чтобы выдавал информацию о векторе-- {1, 2, 3}
     @Override
     public String toString() {
-        StringBuilder resultString = new StringBuilder("{");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('{');
 
-        for (int i = 0; i < components.length; i++) {
-            resultString.append(components[i]);
-
-            if (i < components.length - 1) {
-                resultString.append(", ");
-            }
+        if (components.length > 0) {
+            stringBuilder.append(components[0]);
         }
 
-        resultString.append("}");
-        return resultString.toString();
+        for (int i = 1; i < components.length; i++) {
+            stringBuilder.append(',').append(' ').append(components[i]);
+        }
+
+        stringBuilder.append('}');
+        return stringBuilder.toString();
     }
 
     // прибавление нестатическое, добавляем ноли в тек. вектор, если разная размерность
