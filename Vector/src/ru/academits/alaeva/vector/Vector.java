@@ -88,7 +88,7 @@ public class Vector {
         return stringBuilder.toString();
     }
 
-    // прибавление нестатическое, добавляем ноли в тек. вектор, если разная размерность
+    // нестатическое сложение, добавляем ноли в тек. вектор, если разная размерность
     public void add(Vector vector) {
         if (vector == null) {
             throw new IllegalArgumentException("Нельзя прибавить null-вектор.");
@@ -127,18 +127,15 @@ public class Vector {
         this.components = newComponents;
     }
 
-    public void multiply(double scalarValue) {
+    public void multiply(double scalar) {
         int size = getSize();
         for (int i = 0; i < size; i++) {
-            components[i] *= scalarValue;
+            components[i] *= scalar;
         }
     }
 
     public void reverse() {
-        int size = getSize();
-        for (int i = 0; i < size; i++) {
-            components[i] = -components[i];
-        }
+        multiply(-1);
     }
 
     // Получение длины вектора
@@ -164,86 +161,56 @@ public class Vector {
         // привели объект к Vector
         Vector vector = (Vector) o;
 
-        if (components.length != vector.components.length) {
-            return false;
-        }
-
-        // проверили равенство ссылок и полей
-        for (int i = 0; i < components.length; i++) {
-            if (Double.compare(components[i], vector.components[i]) != 0) {
-                return false;
-            }
-        }
-        return true;
+        return Arrays.equals(components, vector.components);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 37;
-        int hash = 1;
-        for (double component : components) {
-            hash = prime * hash + Double.hashCode(component);
-        }
-        return hash;
+        return Arrays.hashCode(components);
     }
 
     // Статический метод - сложение двух векторов
-    public static Vector sum(Vector vectorA, Vector vectorB) {
-        if (vectorA == null || vectorB == null) {
-            throw new IllegalArgumentException("Векторы не могут быть null.");
+    public static Vector getSum(Vector vector1, Vector vector2) {
+        if (vector1 == null) {
+            throw new IllegalArgumentException("Первый вектор не может быть null, vector1: " + vector1);
+        }
+        if (vector2 == null) {
+            throw new IllegalArgumentException("Второй вектор не может быть null, vector2: " + vector2);
         }
 
-        int vectorAsize = vectorA.getSize();
-        int vectorBsize = vectorB.getSize();
-        int maxSize = Math.max(vectorAsize, vectorBsize);
-        double[] newComponents = new double[maxSize];
-
-        for (int i = 0; i < maxSize; i++) {
-            double vectorAComponents = i < vectorAsize ? vectorA.components[i] : 0.0;
-            double vectorBComponents = i < vectorBsize ? vectorB.components[i] : 0.0;
-            newComponents[i] = vectorAComponents + vectorBComponents;
-        }
-
-        return new Vector(newComponents);
+        Vector result = new Vector(vector1);
+        result.add(vector2);
+        return result;
     }
 
     //Статический метод - вычитание двух векторов
-    public static Vector subtract(Vector vectorA, Vector vectorB) {
-        if (vectorA == null || vectorB == null) {
-            throw new IllegalArgumentException("Векторы не могут быть null.");
+    public static Vector getDiffrence(Vector vector1, Vector vector2) {
+        if (vector1 == null) {
+            throw new IllegalArgumentException("Первый вектор не может быть null, vector1: " + vector1);
+        }
+        if (vector2 == null) {
+            throw new IllegalArgumentException("Второй вектор не может быть null, vector2: " + vector2);
         }
 
-        int vectorAsize = vectorA.getSize();
-        int vectorBsize = vectorB.getSize();
-        int maxSize = Math.max(vectorAsize, vectorBsize);
-        double[] newComponents = new double[maxSize];
-
-        for (int i = 0; i < maxSize; i++) {
-            double vectorAComponents = i < vectorAsize ? vectorA.components[i] : 0.0;
-            double vectorBComponents = i < vectorBsize ? vectorB.components[i] : 0.0;
-            newComponents[i] = vectorAComponents - vectorBComponents;
-        }
-
-        return new Vector(newComponents);
+        Vector result = new Vector(vector1);
+        result.subtract(vector2);
+        return result;
     }
 
     // Скалярное произведение векторов: x1x2+y1y2
-    public static double getScalarProduct(Vector vectorA, Vector vectorB) {
-        if (vectorA == null || vectorB == null) {
-            throw new IllegalArgumentException("Векторы не могут быть null.");
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
+        if (vector1 == null) {
+            throw new IllegalArgumentException("Первый вектор не может быть null, vector1: " + vector1);
+        }
+        if (vector2 == null) {
+            throw new IllegalArgumentException("Второй вектор не может быть null, vector2: " + vector2);
+        }
+        double scalarProduct = 0.0;
+        int minSize = Math.min(vector1.components.length, vector2.components.length);
+        for (int i = 0; i < minSize; i++) {
+            scalarProduct += vector1.components[i] * vector2.components[i];
         }
 
-        double sum = 0.0;
-        int vectorASize = vectorA.getSize();
-        int vectorBSize = vectorB.getSize();
-        int maxSize = Math.max(vectorASize, vectorBSize);
-
-        for (int i = 0; i < maxSize; i++) {
-            double vectorAComponents = i < vectorASize ? vectorA.components[i] : 0.0;
-            double vectorBComponents = i < vectorBSize ? vectorB.components[i] : 0.0;
-            sum += vectorAComponents * vectorBComponents;
-        }
-
-        return sum;
+        return scalarProduct;
     }
 }

@@ -58,9 +58,9 @@ public class Main {
 
         // статические методы
         System.out.println("vector4: " + vector4);
-        System.out.println("Сумма векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.sum(vector5, vector5));
-        // System.out.println("Исключение: " + Vector.sum(vector5, null));
-        System.out.println("Вычитание векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.subtract(vector4, vector5));
+        System.out.println("Сумма векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getSum(vector5, vector5));
+        // System.out.println("Исключение: " + Vector.getSum(vector5, null));
+        System.out.println("Вычитание векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getDiffrence(vector4, vector5));
         System.out.println("Скалярное произведение векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getScalarProduct(vector5, vector4));
     }
 }
