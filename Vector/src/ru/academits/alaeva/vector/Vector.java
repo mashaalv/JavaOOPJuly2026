@@ -8,7 +8,7 @@ public class Vector {
     // Vector(size) – размерность size, все компоненты равны 0
     public Vector(int size) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Размерность вектора size должна быть >0, передано " + size);
+            throw new IllegalArgumentException("Размерность вектора size должна быть > 0, передано " + size);
         }
 
         components = new double[size];// заполнен нолями
@@ -35,11 +35,11 @@ public class Vector {
     // Vector(size, double[]) – заполнение вектора значениями из массива. Если длина массива меньше size, то считать что в остальных компонентах 0
     public Vector(int size, double[] components) {
         if (size <= 0) {
-            throw new IllegalArgumentException("size должно быть положительным" + size);
+            throw new IllegalArgumentException("size должно быть положительным " + size);
         }
 
         if (components == null) {
-            throw new IllegalArgumentException("Массив не может быть null!" + Arrays.toString(components));
+            throw new IllegalArgumentException("Массив не может быть null, сейчас передано: " + Arrays.toString(components));
         }
 
         this.components = new double[size];
@@ -48,21 +48,21 @@ public class Vector {
     }
 
     // получение компоненты по индексу
-    public double getComponent(int i) {
-        if (i < 0 || i >= components.length) {
-            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне [ 0, " + (components.length - 1) + "]");
-        }
-
-        return components[i];
-    }
-
-    //установка компоненты по индексу
-    public void setComponent(int i, double value) {
-        if (i < 0 || i >= components.length) {
+    public double getComponent(int index) {
+        if (index < 0 || index >= components.length) {
             throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне [0, " + (components.length - 1) + "]");
         }
 
-        components[i] = value;
+        return components[index];
+    }
+
+    //установка компоненты по индексу
+    public void setComponent(int index, double value) {
+        if (index < 0 || index >= components.length) {
+            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне [0, " + (components.length - 1) + "], передано: " + index);
+        }
+
+        components[index] = value;
     }
 
     // Метод getSize() для получения размерности вектора (через полe length массива components)
@@ -91,44 +91,44 @@ public class Vector {
     // нестатическое сложение, добавляем ноли в тек. вектор, если разная размерность
     public void add(Vector vector) {
         if (vector == null) {
-            throw new IllegalArgumentException("Нельзя прибавить null-вектор.");
+            throw new IllegalArgumentException("Нельзя прибавить null-вектор, передано: " + vector);
         }
 
-        int size = getSize();
-        int vectorSize = vector.getSize();
+        int size = components.length;
+        int vectorSize = vector.components.length;
         int newSize = Math.max(size, vectorSize);
-        double[] newComponents = new double[newSize];
 
-        for (int i = 0; i < newSize; i++) {
-            double thisComponents = i < size ? components[i] : 0.0;
-            double vectorComponents = i < vectorSize ? vector.components[i] : 0.0;
-            newComponents[i] = thisComponents + vectorComponents;
+        if (size < vectorSize) {
+            components = Arrays.copyOf(components, newSize);
         }
 
-        this.components = newComponents;
+        for (int i = 0; i < vectorSize; i++) {
+            components[i] += vector.components[i];
+        }
     }
 
+    // нестатическое вычитание
     public void subtract(Vector vector) {
         if (vector == null) {
-            throw new IllegalArgumentException("Нельзя вычесть null-вектор.");
+            throw new IllegalArgumentException("Нельзя вычесть null-вектор, передано: " + vector);
         }
 
-        int size = getSize();
-        int vectorSize = vector.getSize();
+        int size = components.length;
+        int vectorSize = vector.components.length;
         int newSize = Math.max(size, vectorSize);
-        double[] newComponents = new double[newSize];
 
-        for (int i = 0; i < newSize; i++) {
-            double thisComponents = i < size ? components[i] : 0.0;
-            double vectorComponents = i < vectorSize ? vector.components[i] : 0.0;
-            newComponents[i] = thisComponents - vectorComponents;
+        if (size < newSize) {
+            components = Arrays.copyOf(components, newSize);
         }
 
-        this.components = newComponents;
+        for (int i = 0; i < vectorSize; i++) {
+            this.components[i] -= vector.components[i];
+        }
     }
 
     public void multiply(double scalar) {
-        int size = getSize();
+        int size = components.length;
+
         for (int i = 0; i < size; i++) {
             components[i] *= scalar;
         }
@@ -141,9 +141,11 @@ public class Vector {
     // Получение длины вектора
     public double getLength() {
         double sum = 0.0;
+
         for (double component : components) {
             sum += component * component;
         }
+
         return Math.sqrt(sum);
     }
 
@@ -174,6 +176,7 @@ public class Vector {
         if (vector1 == null) {
             throw new IllegalArgumentException("Первый вектор не может быть null, vector1: " + vector1);
         }
+
         if (vector2 == null) {
             throw new IllegalArgumentException("Второй вектор не может быть null, vector2: " + vector2);
         }
@@ -183,11 +186,12 @@ public class Vector {
         return result;
     }
 
-    //Статический метод - вычитание двух векторов
-    public static Vector getDiffrence(Vector vector1, Vector vector2) {
+    // Статический метод - вычитание двух векторов
+    public static Vector getDifference(Vector vector1, Vector vector2) {
         if (vector1 == null) {
             throw new IllegalArgumentException("Первый вектор не может быть null, vector1: " + vector1);
         }
+
         if (vector2 == null) {
             throw new IllegalArgumentException("Второй вектор не может быть null, vector2: " + vector2);
         }
@@ -202,11 +206,14 @@ public class Vector {
         if (vector1 == null) {
             throw new IllegalArgumentException("Первый вектор не может быть null, vector1: " + vector1);
         }
+
         if (vector2 == null) {
             throw new IllegalArgumentException("Второй вектор не может быть null, vector2: " + vector2);
         }
+
         double scalarProduct = 0.0;
         int minSize = Math.min(vector1.components.length, vector2.components.length);
+
         for (int i = 0; i < minSize; i++) {
             scalarProduct += vector1.components[i] * vector2.components[i];
         }

@@ -6,8 +6,10 @@ public class Main {
     public static void main(String[] args) {
         // тест - обработка исключения
         try {
-            Vector vector = new Vector(-1);
-
+            Vector vector = new Vector(1);
+            System.out.println("Vector " + vector + ", размерность вектора: " + vector.getSize());
+            Vector badVector = new Vector(-1);
+            System.out.println("Этот код не выполнится: " + badVector);
         } catch (IllegalArgumentException e) {
             System.out.println("Поймали исключение: " + e.getMessage());
         }
@@ -28,8 +30,8 @@ public class Main {
         Vector vector3 = new Vector(2, new double[]{1, 2});// тест конструктор 4
         System.out.println("Vector 3:  " + vector3);// {1.0, 2.0}
 
-        // Vector v1 = new Vector(-1, components2); // тест исключение
-        // Vector v2 = new Vector(3, null); // тест исключение
+        //Vector v1 = new Vector(-1, components2); // тест исключение
+        //Vector v2 = new Vector(3, null); // тест исключение
 
         // Нестатическое сложение векторов
         vector2.add(vector3);
@@ -43,7 +45,7 @@ public class Main {
         // Нестатический метод - умножение на скаляр
         System.out.println("Vector 2:  " + vector2);
         vector2.multiply(3.1);
-        System.out.println("vector2.multiply(3): " + vector2);
+        System.out.println("vector2.multiply(3.1): " + vector2);
 
         // Нестатический метод - reverse
         vector3.reverse();
@@ -60,7 +62,7 @@ public class Main {
         System.out.println("vector4: " + vector4);
         System.out.println("Сумма векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getSum(vector5, vector5));
         // System.out.println("Исключение: " + Vector.getSum(vector5, null));
-        System.out.println("Вычитание векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getDiffrence(vector4, vector5));
+        System.out.println("Вычитание векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getDifference(vector4, vector5));
         System.out.println("Скалярное произведение векторов vector4 {1, 2, 3} и vector5 {1, 2}: " + Vector.getScalarProduct(vector5, vector4));
     }
 }
