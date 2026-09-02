@@ -1,4 +1,4 @@
-package ru.academits.alaeva.comparators;
+package ru.academits.alaeva.shapes_comparators;
 
 import ru.academits.alaeva.shapes.Shape;
 

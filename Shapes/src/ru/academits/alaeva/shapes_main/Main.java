@@ -1,7 +1,7 @@
 package ru.academits.alaeva.shapes_main;
 
-import ru.academits.alaeva.comparators.ShapeAreaComparator;
-import ru.academits.alaeva.comparators.ShapePerimeterComparator;
+import ru.academits.alaeva.shapes_comparators.ShapeAreaComparator;
+import ru.academits.alaeva.shapes_comparators.ShapePerimeterComparator;
 import ru.academits.alaeva.shapes.*;
 
 import java.util.Arrays;
@@ -91,19 +91,19 @@ public class Main {
         Shape secondMaxPerimeterSingleElement = getSecondMaxPerimeterShape(new Shape[]{rectangle1});
         System.out.println("getSecondMaxPerimeterShape если передали массив из одного элемента: " + (secondMaxPerimeterSingleElement != null ? secondMaxPerimeterSingleElement : "нет данных."));
         // Часть 3: проверка хэш код и equals
-        System.out.println("triangle1.equals(triangle2): " + triangle1.equals(triangle2));// false
+        System.out.println("triangle1.equals(triangle2): " + triangle1.equals(triangle2)); // false
         System.out.println("Хэш-коды triangle1 и triangle2 совпадают " + (triangle1.hashCode() == triangle2.hashCode()));
 
-        System.out.println("rectangle1.equals(rectangle2): " + rectangle1.equals(rectangle2));// true
-        System.out.println("Хэш-коды rectangle1 и rectangle2 совпадают " + (rectangle1.hashCode() == rectangle2.hashCode()));// 76547009
+        System.out.println("rectangle1.equals(rectangle2): " + rectangle1.equals(rectangle2)); // true
+        System.out.println("Хэш-коды rectangle1 и rectangle2 совпадают " + (rectangle1.hashCode() == rectangle2.hashCode())); // 76547009
 
-        System.out.println("circle1.equals(circle2): " + circle1.equals(circle2));// true
-        System.out.println("Хэш-коды circle1 и circle2 совпадают " + (circle1.hashCode() == circle2.hashCode()));// 1074790437 через objects 1074790431. Без перегрузки false 1023892928
+        System.out.println("circle1.equals(circle2): " + circle1.equals(circle2)); // true
+        System.out.println("Хэш-коды circle1 и circle2 совпадают " + (circle1.hashCode() == circle2.hashCode())); // 1074790437 через objects 1074790431. Без перегрузки false 1023892928
 
-        System.out.println("square1.equals(square2): " + square1.equals(square2));// false
+        System.out.println("square1.equals(square2): " + square1.equals(square2)); // false
         System.out.println("Хэш-коды square1 и square2 совпадают " + (square1.hashCode() == square2.hashCode()));
 
-        System.out.println("triangle1.equals(null): " + triangle1.equals(null));// false
-        System.out.println("triangle1.equals(triangle1): " + triangle1.equals(triangle1));// true
+        System.out.println("triangle1.equals(null): " + triangle1.equals(null)); // false
+        System.out.println("triangle1.equals(triangle1): " + triangle1.equals(triangle1)); // true
     }
 }
