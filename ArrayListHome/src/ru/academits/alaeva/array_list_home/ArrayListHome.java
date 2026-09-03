@@ -16,7 +16,7 @@ public class ArrayListHome {
         // читаем построчно из файла:
         try (BufferedReader reader = Files.newBufferedReader(Path.of(fileName))) {
             String line;
-            
+
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
@@ -38,8 +38,8 @@ public class ArrayListHome {
         }
     }
 
-    // 3.Есть список из целых чисел, в нём некоторые числа могут повторяться.
-    // Cоздать новый список, в котором будут элементы первого списка в таком же порядке, но без повторений
+    // 3. Есть список из целых чисел, в нём некоторые числа могут повторяться.
+    // Создать новый список, в котором будут элементы первого списка в таком же порядке, но без повторений
     public static List<Integer> getUniqueNumbers(ArrayList<Integer> numbers) {
         List<Integer> resultList = new ArrayList<>();
         for (Integer number : numbers) {
