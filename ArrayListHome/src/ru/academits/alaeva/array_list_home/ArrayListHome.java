@@ -16,6 +16,7 @@ public class ArrayListHome {
         // читаем построчно из файла:
         try (BufferedReader reader = Files.newBufferedReader(Path.of(fileName))) {
             String line;
+            
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
