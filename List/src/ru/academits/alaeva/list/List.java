@@ -17,18 +17,20 @@ public class List<T> {
 
     // получение значения первого элемента
     public T getFirst() {
-
         if (head == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Список пуст.");
         }
+
         return head.getData();
     }
 
-
     // ============= проверка индекса
     private void checkIndex(int index) {
+        if (count == 0) {
+            throw new IllegalStateException("Список пуст.");
+        }
         if (index < 0 || index >= count) {
-            throw new IndexOutOfBoundsException("Индекс " + index + " больше чем размер массива " + count);
+            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + " текущий размер списка: " + count);
         }
     }
 
@@ -37,7 +39,7 @@ public class List<T> {
         checkIndex(index);
         ListItem<T> current = head;
         for (int i = 0; i < index; i++) {
-            current.getNext();
+            current = current.getNext();
         }
         return current;
     }
@@ -47,126 +49,138 @@ public class List<T> {
         return getNodeAt(index).getData();
     }
 
+    // Изменение значения по индексу пусть выдает старое значение.
+    public T setData(int index, T newData) {
+        ListItem<T> node = getNodeAt(index);
+        T oldData = node.getData();
+        node.setData(newData);
+        return oldData;
+    }
 
-    // изменение значения по указанному индексу.
-
-	// вставка элемента в начало
+    // вставка элемента в начало
     public void addFirst(T value) {
-        //  Создаем новый узел.
-
-        ListItem<T> newNode = new ListItem<>(value, head);///&???????????проверить!
-
-        // новый узел новой головой списка.
-        // Теперь начало списка (head) должно указывать на наш newNode.
+        ListItem<T> newNode = new ListItem<>(value, head);
         head = newNode;
-
         count++;
     }
 
+    // вставка элемента по индексу
+    public void add(int index, T value) {
+        if (index < 0 || index > count) {
+            throw new IndexOutOfBoundsException("Недопустимый index " + index + "Размер списка. " + count);
+        }
+
+        if (index == 0) {
+            addFirst(value);
+            return;
+        }
+
+        ListItem<T> prevNode = getNodeAt(index - 1);
+        ListItem<T> newNode = new ListItem<>(value, prevNode.getNext());
+
+        prevNode.setNext(newNode);
+        count++;
+    }
+
+    // удаление первого элемента, пусть выдает значение элемента
+    public T removeFirst() {
+        if (head == null) {
+            throw new IllegalStateException("Список пуст.");
+        }
+        T oldFirstData = head.getData();
+        head = head.getNext();
+        count--;
+        return oldFirstData;
+    }
+
+    // удаление элемента по индексу, пусть выдает значение элемента
+    public T remove(int index) {
+        checkIndex(index);
+
+        if (index == 0) {
+            return removeFirst();
+        }
+
+        ListItem<T> prevNode = getNodeAt(index - 1);
+        ListItem<T> nodeToRemove = prevNode.getNext();
+        prevNode.setNext(nodeToRemove.getNext());
+        count--;
+        return nodeToRemove.getData();
+    }
+
+    // удаление узла по значению, пусть выдает true, если элемент был удален
+    public boolean removeByValue(T value) {
+        if (head == null) {
+            return false;
+        }
+
+        if (value.equals(head.getData())) {
+            removeFirst();
+            return true;
+        }
+        ListItem<T> prev = head;
+        ListItem<T> current = head.getNext();
+
+        while (current != null) {
+            if (value.equals(current.getData())) {
+                prev.setNext(current.getNext());
+                count--;
+                return true;
+            }
+
+            prev = prev.getNext();
+            current = current.getNext();
+        }
+        return false;
+    }
+
+    // разворот списка за линейное время
+    public void reverse() {
+        if (head == null || head.getNext()==null) {
+            return;
+        }
+        ListItem<T> prevItem = null;
+        ListItem<T> currentItem = head;
+        ListItem<T> nextTemp = null;
+
+        while (currentItem != null) {
+
+        }
+        head= prevItem;
+
+  /*      for (ListItem<Integer> currentItem = head, previousItem = null;
+             currentItem != null;
+             previousItem = currentItem, currentItem = currentItem.getNext()) {
+            System.out.println(currentItem.getData());
+        }*/
+    }
 
 
-   /* Изменение значения по индексу пусть выдает старое значение.
-   	удаление элемента по индексу, пусть выдает значение элемента
-•	вставка элемента в начало
-•	вставка элемента по индексу
-•	удаление узла по значению, пусть выдает true, если элемент был удален
-•	удаление первого элемента, пусть выдает значение элемента
-•	разворот списка за линейное время
-•	копирование списка*/
+    // копирование списка
+    public List<T> copy() {
+        // cоздаем новый пустой список
+        List<T> newLinkedList = new List<>();
+// - Проходим по всем элементам текущего списка
+// - значение в новый список ( add)
+// - вернуть новый список
+    }
 
+    // ================================  toString()
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('[');
 
-    // ============ ПУБЛИЧНЫЕ МЕТОДЫ ============
+        ListItem<T> current = head;
 
-
-    // 3. Получение значения по индексу
-    // public T get(int index)
-    // - Используем getNodeByIndex(index)
-    // - Возвращаем данные из найденного узла
-
-    // 4. Изменение значения по индексу (возвращает старое)
-    // public T set(int index, T newValue)
-    // - Находим узел по индексу
-    // - Сохраняем старое значение
-    // - Меняем значение в узле
-    // - Возвращаем старое значение
-
-    // 5. Удаление элемента по индексу (возвращает значение)
-    // public T remove(int index)
-    // - Проверяем валидность индекса
-    // - Если index == 0: удаляем первый элемент (используем removeFirst())
-    // - Иначе:
-    //   - Находим узел ПЕРЕД удаляемым (index - 1)
-    //   - Сохраняем удаляемый узел и его значение
-    //   - Переподвязываем ссылки: prev.next = nodeToRemove.next
-    //   - Если удаляем последний, обновляем tail
-    //   - Уменьшаем size
-    //   - Возвращаем значение
-
-    // 6. Вставка элемента в начало
-    // public void addFirst(T value)
-    // - Создаем новый узел
-    // - newHead.next = старый head
-    // - head = новый узел
-    // - Если список был пуст, tail тоже указывает на новый узел
-    // - Увеличиваем size
-
-    // 7. Вставка элемента по индексу
-    // public void add(int index, T value)
-    // - Проверяем, что index от 0 до size (включительно)
-    // - Если index == 0: используем addFirst(value)
-    // - Если index == size: используем addLast(value) [если реализуете]
-    // - Иначе:
-    //   - Находим узел ПЕРЕД местом вставки (index - 1)
-    //   - Создаем новый узел
-    //   - new.next = prev.next
-    //   - prev.next = new
-    //   - Увеличиваем size
-
-    // 8. Удаление узла по значению (возвращает true/false)
-    // public boolean removeByValue(T value)
-    // - Проходим по списку, ищем узел с таким значением
-    // - Если нашли:
-    //   - Если это head: удаляем первый (removeFirst)
-    //   - Иначе переподвязываем ссылки
-    //   - Уменьшаем size
-    //   - Возвращаем true
-    // - Если не нашли: возвращаем false
-
-    // 9. Удаление первого элемента (возвращает значение)
-    // public T removeFirst()
-    // - Проверяем, не пустой ли список
-    // - Сохраняем значение head
-    // - head = head.next
-    // - Если список стал пустым, tail = null
-    // - Уменьшаем size
-    // - Возвращаем сохраненное значение
-
-    // 10. Разворот списка (за линейное время)
-    // public void reverse()
-    // - Если список пуст или из одного элемента - ничего не делаем
-    // - Иначе:
-    //   - Инициализируем: prev = null, current = head
-    //   - Пока current != null:
-    //     - nextTemp = current.next
-    //     - current.next = prev
-    //     - prev = current
-    //     - current = nextTemp
-    //   - Меняем head и tail местами
-
-    // 11. Копирование списка
-    // public MyLinkedList<T> copy()
-    // - Создаем новый пустой список
-    // - Проходим по всем элементам текущего списка
-    // - Для каждого добавляем значение в новый список (addLast или add)
-    // - Возвращаем новый список
-
-    // ============ ДОПОЛНИТЕЛЬНЫЙ МЕТОД (опционально) ============
-    // public void addLast(T value) - вставка в конец
-    // - Для эффективности, чтобы не проходить весь список каждый раз
-
-    // ============ ДЛЯ ТЕСТИРОВАНИЯ ============
-    // Переопределить toString() для удобного вывода
-
+        while (current != null) {
+            stringBuilder.append(current.getData()).append(", ");
+            current = current.getNext();
+        }
+        if (head != null) {
+            stringBuilder.setLength(stringBuilder.length() - 2);
+        }
+        stringBuilder.append(']');
+        return stringBuilder.toString();
+    }
 }
-
-
