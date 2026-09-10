@@ -59,7 +59,7 @@ public class Main {
         System.out.println("Пустой список: " + list);
 
         // Тестируем копирование
-        List<Integer> copyList = list.copy(); // скоприруем пустой список
+        List<Integer> copyList = list.copy(); // скопирируем пустой список
         System.out.println("Копия пустого списка list: " + copyList); // []
         List<String> copyList2 = list2.copy();
         System.out.println("Исходный список list2: " + list2);

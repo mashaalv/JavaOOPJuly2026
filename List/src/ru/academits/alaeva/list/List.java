@@ -165,7 +165,7 @@ public class List<T> {
 
     // копирование списка
     public List<T> copy() {
-        // cоздаем новый пустой список
+        // создаем новый пустой список
         List<T> newList = new List<>();
 
         if (this.head == null) {
@@ -174,12 +174,12 @@ public class List<T> {
 
         // копируем голову исходного списка
         newList.head = new ListItem<>(this.head.getData());
-        // в исхдодном списке берем второй элемент
+        // в исходном списке берем второй элемент
         ListItem<T> currentItem = this.head.getNext();
         ListItem<T> currentCopy = newList.head;
 
         while (currentItem != null) {
-            // копируем след. элемент и связываем с предудщим в копии списка:
+            // копируем след. элемент и связываем с предыдущим в копии списка:
             currentCopy.setNext(new ListItem<>(currentItem.getData()));
             currentCopy = currentCopy.getNext();
             newList.count++;
