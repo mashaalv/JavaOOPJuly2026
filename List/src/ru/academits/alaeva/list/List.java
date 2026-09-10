@@ -2,7 +2,7 @@ package ru.academits.alaeva.list;
 
 public class List<T> {
     private ListItem<T> head;
-    private int count;//до count-1
+    private int count;// count
 
     // Конструктор - инициализация пустого списка
     public List() {
@@ -29,6 +29,7 @@ public class List<T> {
         if (count == 0) {
             throw new IllegalStateException("Список пуст.");
         }
+
         if (index < 0 || index >= count) {
             throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + " текущий размер списка: " + count);
         }
@@ -38,9 +39,11 @@ public class List<T> {
     public ListItem<T> getNodeAt(int index) {
         checkIndex(index);
         ListItem<T> current = head;
+
         for (int i = 0; i < index; i++) {
             current = current.getNext();
         }
+
         return current;
     }
 
@@ -54,6 +57,7 @@ public class List<T> {
         ListItem<T> node = getNodeAt(index);
         T oldData = node.getData();
         node.setData(newData);
+
         return oldData;
     }
 
@@ -87,9 +91,11 @@ public class List<T> {
         if (head == null) {
             throw new IllegalStateException("Список пуст.");
         }
+
         T oldFirstData = head.getData();
         head = head.getNext();
         count--;
+
         return oldFirstData;
     }
 
@@ -105,6 +111,7 @@ public class List<T> {
         ListItem<T> nodeToRemove = prevNode.getNext();
         prevNode.setNext(nodeToRemove.getNext());
         count--;
+
         return nodeToRemove.getData();
     }
 
@@ -118,6 +125,7 @@ public class List<T> {
             removeFirst();
             return true;
         }
+
         ListItem<T> prev = head;
         ListItem<T> current = head.getNext();
 
@@ -131,38 +139,54 @@ public class List<T> {
             prev = prev.getNext();
             current = current.getNext();
         }
+
         return false;
     }
 
     // разворот списка за линейное время
     public void reverse() {
-        if (head == null || head.getNext()==null) {
+        if (head == null || head.getNext() == null) {
             return;
         }
+
         ListItem<T> prevItem = null;
         ListItem<T> currentItem = head;
-        ListItem<T> nextTemp = null;
+        ListItem<T> nextItem = null;
 
         while (currentItem != null) {
-
+            nextItem = currentItem.getNext();
+            currentItem.setNext(prevItem);
+            prevItem = currentItem;
+            currentItem = nextItem;
         }
-        head= prevItem;
 
-  /*      for (ListItem<Integer> currentItem = head, previousItem = null;
-             currentItem != null;
-             previousItem = currentItem, currentItem = currentItem.getNext()) {
-            System.out.println(currentItem.getData());
-        }*/
+        head = prevItem;
     }
-
 
     // копирование списка
     public List<T> copy() {
         // cоздаем новый пустой список
-        List<T> newLinkedList = new List<>();
-// - Проходим по всем элементам текущего списка
-// - значение в новый список ( add)
-// - вернуть новый список
+        List<T> newList = new List<>();
+
+        if (this.head == null) {
+            return newList;
+        }
+
+        // копируем голову исходного списка
+        newList.head = new ListItem<>(this.head.getData());
+        // в исхдодном списке берем второй элемент
+        ListItem<T> currentItem = this.head.getNext();
+        ListItem<T> currentCopy = newList.head;
+
+        while (currentItem != null) {
+            // копируем след. элемент и связываем с предудщим в копии списка:
+            currentCopy.setNext(new ListItem<>(currentItem.getData()));
+            currentCopy = currentCopy.getNext();
+            newList.count++;
+            currentItem = currentItem.getNext();
+        }
+
+        return newList;
     }
 
     // ================================  toString()
@@ -177,9 +201,11 @@ public class List<T> {
             stringBuilder.append(current.getData()).append(", ");
             current = current.getNext();
         }
+
         if (head != null) {
             stringBuilder.setLength(stringBuilder.length() - 2);
         }
+
         stringBuilder.append(']');
         return stringBuilder.toString();
     }

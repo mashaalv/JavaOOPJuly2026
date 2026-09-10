@@ -5,11 +5,13 @@ import ru.academits.alaeva.list.List;
 public class Main {
     public static void main(String[] args) {
         List<Integer> list1 = new List<>();
+
         try {
             list1.getData(0);// exception
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }
+
         // тест - вставка элемента в начало
         list1.addFirst(0);
         list1.addFirst(-1);
@@ -34,11 +36,13 @@ public class Main {
 
         // Тестируем удаление по индексу
         System.out.println("remove(1): " + list1.remove(1)); // 2
-        System.out.println("После remove: " + list1); // [99,-1,10]
+        System.out.println("После remove: " + list1); // [99,-1,0]
 
         // Тестируем удаление по значению
-        System.out.println("removeByIndex(1): " + list1.removeByValue(100)); // false
-        System.out.println("После removeByIndex: " + list1); // [99,-1,0]
+        System.out.println("removeByValue(1): " + list1.removeByValue(100)); // false
+        System.out.println("После removeByValue(1): " + list1); // [99,-1,0]
+        System.out.println("removeByValue(99): " + list1.removeByValue(99)); // true
+        System.out.println("После removeByValue(99): " + list1); // [-1,0]
 
         // Тестируем разворот
         List<String> list2 = new List<>();
@@ -46,11 +50,22 @@ public class Main {
         list2.addFirst("s");
         list2.addFirst("d");
         list2.addFirst("f");
-        System.out.println("До разворота "+list2);
-        //list2.reverse();
-        System.out.println("После разворота "+list2);
+        System.out.println("До разворота " + list2);
+        list2.reverse();
+        System.out.println("После разворота " + list2);
+        // разворот на пустом списке:
+        List<Integer> list = new List<>();
+        list.reverse();
+        System.out.println("Пустой список: " + list);
 
+        // Тестируем копирование
+        List<Integer> copyList = list.copy(); // скоприруем пустой список
+        System.out.println("Копия пустого списка list: " + copyList); // []
+        List<String> copyList2 = list2.copy();
+        System.out.println("Исходный список list2: " + list2);
+        System.out.println("Копия list2: " + copyList2); // [a,s, d, f]
+        list2.addFirst("w");
+        System.out.println("Проверим, что списки независимы, поменяем list2: " + list2);
+        System.out.println("Копия list2 не изменилась: " + copyList2);
     }
 }
-
-
