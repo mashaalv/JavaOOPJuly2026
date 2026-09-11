@@ -52,7 +52,7 @@ public class ArrayListHome {
     public static void main(String[] args) {
         // 1. тест Часть1 =======
         try {
-            List<String> lines = ArrayListHome.readLinesFromFile("input1.txt");
+            List<String> lines = ArrayListHome.readLinesFromFile("input.txt");
             System.out.println("Содержимое файла:");
             System.out.println(lines);
         } catch (FileNotFoundException e) {
