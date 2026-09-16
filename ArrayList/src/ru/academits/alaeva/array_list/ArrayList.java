@@ -1,21 +1,23 @@
 package ru.academits.alaeva.array_list;
 
+import javax.swing.plaf.PanelUI;
 import java.util.*;
 
 public class ArrayList<E> implements List<E> {
     private E[] items;
     private int size;
+    private static final int DEFAULT_CAPACITY = 10;
 
-    // конструктор
+    // =====================================конструкторы
     public ArrayList() {
         //noinspection unchecked
-        items = (E[]) new Object[10];// capacity == вместимость, размер списка size - это количество элементов, разные вещи
+        items = (E[]) new Object[DEFAULT_CAPACITY];// capacity == вместимость, размер списка size - это количество элементов
         size = 0; // размер списка
     }
 
     public ArrayList(int capacity) {
         if (capacity < 0) {
-            throw new IllegalArgumentException("Размерность списка больше или равна 0, передано:" + capacity);
+            throw new IllegalArgumentException("Размерность списка должна быть больше или равна 0, передано:" + capacity);
         }
 
         //noinspection unchecked
@@ -28,6 +30,7 @@ public class ArrayList<E> implements List<E> {
         return size;
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
@@ -39,12 +42,13 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    private void checkIndexForAdd(int index) {   // для add(int, E): 0 <= index <= size
+    private void checkIndexForAdd(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Некорректный индекс, размерность списка: " + size);
         }
     }
 
+    @Override
     public E get(int index) {
         checkIndex(index);
         return (E) items[index];
@@ -57,7 +61,7 @@ public class ArrayList<E> implements List<E> {
         E oldElement = (E) items[index];
         // запишем новый элемент
         items[index] = element;
-        // вернуть старый элемент - как в List
+        // нужно вернуть старый элемент (List)
         return oldElement;
     }
 
@@ -65,11 +69,11 @@ public class ArrayList<E> implements List<E> {
     private void increaseCapacity() {
         if (items.length == 0) {
             //noinspection unchecked
-            items = (E[]) new Object[10];
+            items = (E[]) new Object[DEFAULT_CAPACITY];
             return;
         }
-        items = Arrays.copyOf(items, items.length * 2);
 
+        items = Arrays.copyOf(items, items.length * 2);
     }
 
     // ======================== метод add =======================
@@ -86,8 +90,95 @@ public class ArrayList<E> implements List<E> {
     @Override
     public void add(int index, E item) {
         checkIndexForAdd(index);
-        // TODO: Сдвинь элементы вправо на 1 позицию, начиная с index (используй System.arraycopy).
-        // TODO: Вставь element, увеличь size.
+
+        if (size == items.length) {
+            increaseCapacity();
+        }
+        System.arraycopy(items, index, items, index + 1, size - index);
+        items[index] = item;
+        ++size;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public E remove(int index) {
+        checkIndex(index);
+        E oldValue = items[index];
+
+        // если не последний элемент, то копируем после индекса
+        if (index < size - 1) {
+            System.arraycopy(items, index + 1, items, index, size - index - 1);
+        }
+
+        items[size - 1] = null;
+        --size;
+        return oldValue;
+    }
+
+    public void ensureCapacity(int minCapacity) {
+        int itemsLength = items.length;
+        int newCapacity;
+
+        if (minCapacity < itemsLength) {
+            return;
+        }
+
+        if (itemsLength == 0) {
+            newCapacity = Math.max(minCapacity, DEFAULT_CAPACITY);
+        } else {
+            newCapacity = Math.max(itemsLength * 2, minCapacity);
+        }
+        items = Arrays.copyOf(items, newCapacity);
+    }
+
+    public void trimToSize() {
+        int itemsLength = items.length;
+
+        if (size < itemsLength) {
+            items = Arrays.copyOf(items, size);
+        }
+    }
+
+    // == вспомогательный метод capacity
+    public int capacity() {
+        return items.length;
+    }
+
+    @Override
+    public String toString() {
+        if (size == 0) {
+            return "[]";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('[');
+
+        for (int i = 0; i < size - 1; i++) {
+            stringBuilder.append(items[i]).append(", ");
+
+        }
+
+        stringBuilder.append(items[size - 1]).append(']');
+
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < size; i++) {
+            items[i] = null;
+        }
+
+        size = 0;
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return 0;/////////////////////////////////////!!
     }
 
     // ====================================================остальные методы лист
@@ -111,11 +202,6 @@ public class ArrayList<E> implements List<E> {
         return null;
     }
 
-
-    @Override
-    public boolean remove(Object o) {
-        return false;
-    }
 
     @Override
     public boolean containsAll(Collection<?> c) {
@@ -143,22 +229,6 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public void clear() {
-
-    }
-
-
-    @Override
-    public E remove(int index) {
-        return null;
-    }
-
-    @Override
-    public int indexOf(Object o) {
-        return 0;
-    }
-
-    @Override
     public int lastIndexOf(Object o) {
         return 0;
     }
@@ -177,12 +247,4 @@ public class ArrayList<E> implements List<E> {
     public List<E> subList(int fromIndex, int toIndex) {
         return List.of();
     }
-
-
-/*    public void ensureCapacity(int minCapacity) { }
-
-    public void trimToSize() {  }*/
-
-
-    //  @Override public boolean remove(Object o) { throw new UnsupportedOperationException(); }
 }
