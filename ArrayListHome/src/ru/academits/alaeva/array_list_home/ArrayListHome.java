@@ -12,18 +12,19 @@ import java.util.List;
 public class ArrayListHome {
     // 1. Прочитать в список все строки из файла
     public static List<String> readLinesFromFile(String fileName) throws IOException {
-        // создаем список для строк из файла:
-        List<String> lines = new ArrayList<>();
+
         // читаем построчно из файла:
         try (BufferedReader reader = Files.newBufferedReader(Path.of(fileName))) {
+            // создаем список для строк из файла:
+            List<String> lines = new ArrayList<>();
             String line;
 
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
-        }
 
-        return lines;
+            return lines;
+        }
     }
 
     // 2. Есть список из целых чисел. Удалить из него все четные числа. В этой задаче новый список создавать нельзя
@@ -37,10 +38,10 @@ public class ArrayListHome {
 
     // 3. Есть список из целых чисел, в нём некоторые числа могут повторяться.
     // Создать новый список, в котором будут элементы первого списка в таком же порядке, но без повторений
-    public static <T> List<T> getUniqueElements(ArrayList<T> elements) {
-        List<T> resultList = new ArrayList<>(elements.size());
+    public static <T> ArrayList<T> getUniqueElements(ArrayList<T> list) {
+        ArrayList<T> resultList = new ArrayList<>(list.size());
 
-        for (T element : elements) {
+        for (T element : list) {
             if (!resultList.contains(element)) {
                 resultList.add(element);
             }
@@ -52,7 +53,7 @@ public class ArrayListHome {
     public static void main(String[] args) {
         // 1. тест Часть1 =======
         try {
-            List<String> lines = ArrayListHome.readLinesFromFile("input.txt");
+            List<String> lines = readLinesFromFile("input.txt");
             System.out.println("Содержимое файла:");
             System.out.println(lines);
         } catch (FileNotFoundException e) {
@@ -65,7 +66,7 @@ public class ArrayListHome {
         ArrayList<Integer> numbers = new ArrayList<>(Arrays.asList(1, 54, -8, 10, 3, 4, 9, 5, 666, 667));
         System.out.println("Исходный список четных чисел:");
         System.out.println(numbers);
-        ArrayListHome.removeEvenNumbers(numbers);
+        removeEvenNumbers(numbers);
         System.out.println("Список после удаления четных чисел:");
         System.out.println(numbers);
 
@@ -74,6 +75,6 @@ public class ArrayListHome {
         System.out.println("Исходный список:");
         System.out.println(list);
         System.out.println("Новый список без повторений:");
-        System.out.println(ArrayListHome.getUniqueElements(list));
+        System.out.println(getUniqueElements(list));
     }
 }
