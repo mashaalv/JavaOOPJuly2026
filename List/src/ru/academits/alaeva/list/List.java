@@ -1,14 +1,10 @@
 package ru.academits.alaeva.list;
 
-public class List<T> {
-    private ListItem<T> head;
-    private int count;// count
+import java.util.NoSuchElementException;
 
-    // Конструктор - инициализация пустого списка
-    public List() {
-        head = null;
-        count = 0;
-    }
+public class List<E> {
+    private ListItem<E> head;
+    private int count; // количество элементов в списке
 
     // получение размера списка
     public int getSize() {
@@ -16,9 +12,9 @@ public class List<T> {
     }
 
     // получение значения первого элемента
-    public T getFirst() {
+    public E getFirst() {
         if (head == null) {
-            throw new IllegalStateException("Список пуст.");
+            throw new NoSuchElementException("Список пуст.");
         }
 
         return head.getData();
@@ -26,19 +22,15 @@ public class List<T> {
 
     // ============= проверка индекса
     private void checkIndex(int index) {
-        if (count == 0) {
-            throw new IllegalStateException("Список пуст.");
-        }
-
         if (index < 0 || index >= count) {
-            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + " текущий размер списка: " + count);
+            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + " допуситмый диапазон индексов: [0; " + (count - 1) + "].");
         }
     }
 
     // ============ метод получения узла по индексу
-    public ListItem<T> getNodeAt(int index) {
-        checkIndex(index);
-        ListItem<T> current = head;
+    private ListItem<E> getNodeAt(int index) {
+        //  checkIndex(index); в выз. методах!!!
+        ListItem<E> current = head;
 
         for (int i = 0; i < index; i++) {
             current = current.getNext();
@@ -48,51 +40,61 @@ public class List<T> {
     }
 
     // получение значения по указанному индексу================
-    public T getData(int index) {
+    public E getData(int index) {
+        checkIndex(index);
+
         return getNodeAt(index).getData();
     }
 
+
     // Изменение значения по индексу пусть выдает старое значение.
-    public T setData(int index, T newData) {
-        ListItem<T> node = getNodeAt(index);
-        T oldData = node.getData();
+    public E setData(int index, E newData) {
+        checkIndex(index);
+
+        ListItem<E> node = getNodeAt(index);
+
+        E oldData = node.getData();
         node.setData(newData);
 
         return oldData;
     }
 
     // вставка элемента в начало
-    public void addFirst(T value) {
-        ListItem<T> newNode = new ListItem<>(value, head);
-        head = newNode;
+    public void addFirst(E data) {
+        head = new ListItem<>(data, head);
         count++;
     }
 
     // вставка элемента по индексу
-    public void add(int index, T value) {
+    public void add(int index, E value) {
         if (index < 0 || index > count) {
-            throw new IndexOutOfBoundsException("Недопустимый index " + index + "Размер списка. " + count);
+            throw new IndexOutOfBoundsException("Недопустимый index: " + index + ". Допустимый диапазон [0; " + count + "].");
         }
+
+        if (index < 0 || index > count) {
+            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index
+                    + ". Допустимый диапазон: [0, " + count + "].");
+        }
+
 
         if (index == 0) {
             addFirst(value);
             return;
         }
 
-        ListItem<T> prevNode = getNodeAt(index - 1);
-        ListItem<T> newNode = new ListItem<>(value, prevNode.getNext());
+        ListItem<E> previousNode = getNodeAt(index - 1);
 
-        prevNode.setNext(newNode);
+        previousNode.setNext(new ListItem<>(value, previousNode.getNext()));
         count++;
     }
 
     // удаление первого элемента, пусть выдает значение элемента
-    public T removeFirst() {
+    public E removeFirst() {
         if (head == null) {
             throw new IllegalStateException("Список пуст.");
         }
 
-        T oldFirstData = head.getData();
+        E oldFirstData = head.getData();
         head = head.getNext();
         count--;
 
@@ -100,44 +102,51 @@ public class List<T> {
     }
 
     // удаление элемента по индексу, пусть выдает значение элемента
-    public T remove(int index) {
+    public E remove(int index) {
         checkIndex(index);
 
         if (index == 0) {
             return removeFirst();
         }
 
-        ListItem<T> prevNode = getNodeAt(index - 1);
-        ListItem<T> nodeToRemove = prevNode.getNext();
-        prevNode.setNext(nodeToRemove.getNext());
+        ListItem<E> previousNode = getNodeAt(index - 1);
+        ListItem<E> nodeToRemove = previousNode.getNext();
+        previousNode.setNext(nodeToRemove.getNext());
         count--;
 
         return nodeToRemove.getData();
     }
 
     // удаление узла по значению, пусть выдает true, если элемент был удален
-    public boolean removeByValue(T value) {
+    public boolean removeByValue(E data) {/// ////////////////////////////////
         if (head == null) {
             return false;
         }
 
-        if (value.equals(head.getData())) {
+        if (data.equals(head.getData())) {
             removeFirst();
             return true;
         }
 
-        ListItem<T> prev = head;
-        ListItem<T> current = head.getNext();
+        if (data == null) {
+            if (head.getData() == null) {
+                removeFirst();
+                return true;
+            }
+        }
 
-        while (current != null) {
-            if (value.equals(current.getData())) {
-                prev.setNext(current.getNext());
+        ListItem<E> previousNode = head;
+        ListItem<E> currentNode = head.getNext();
+
+        while (currentNode != null) {
+            if (data.equals(currentNode.getData())) {
+                previousNode.setNext(currentNode.getNext());
                 count--;
                 return true;
             }
 
-            prev = prev.getNext();
-            current = current.getNext();
+            previousNode = currentNode;
+            currentNode = currentNode.getNext();
         }
 
         return false;
@@ -149,24 +158,24 @@ public class List<T> {
             return;
         }
 
-        ListItem<T> prevItem = null;
-        ListItem<T> currentItem = head;
-        ListItem<T> nextItem = null;
+        ListItem<E> previousItem = null;
+        ListItem<E> currentItem = head;
+        ListItem<E> nextItem = null;
 
         while (currentItem != null) {
             nextItem = currentItem.getNext();
-            currentItem.setNext(prevItem);
-            prevItem = currentItem;
+            currentItem.setNext(previousItem);
+            previousItem = currentItem;
             currentItem = nextItem;
         }
 
-        head = prevItem;
+        head = previousItem;
     }
 
     // копирование списка
-    public List<T> copy() {
+    public List<E> copy() {
         // создаем новый пустой список
-        List<T> newList = new List<>();
+        List<E> newList = new List<>();
 
         if (this.head == null) {
             return newList;
@@ -175,8 +184,8 @@ public class List<T> {
         // копируем голову исходного списка
         newList.head = new ListItem<>(this.head.getData());
         // в исходном списке берем второй элемент
-        ListItem<T> currentItem = this.head.getNext();
-        ListItem<T> currentCopy = newList.head;
+        ListItem<E> currentItem = this.head.getNext();
+        ListItem<E> currentCopy = newList.head;
 
         while (currentItem != null) {
             // копируем след. элемент и связываем с предыдущим в копии списка:
@@ -195,7 +204,7 @@ public class List<T> {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
 
-        ListItem<T> current = head;
+        ListItem<E> current = head;
 
         while (current != null) {
             stringBuilder.append(current.getData()).append(", ");
