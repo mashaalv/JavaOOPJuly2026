@@ -7,8 +7,8 @@ public class Main {
         List<Integer> list1 = new List<>();
 
         try {
-            list1.getData(0);// exception
-        } catch (IllegalStateException e) {
+            list1.getData(0); // exception
+        } catch (IndexOutOfBoundsException e) {
             System.out.println(e.getMessage());
         }
 
@@ -39,10 +39,16 @@ public class Main {
         System.out.println("После remove: " + list1); // [99,-1,0]
 
         // Тестируем удаление по значению
-        System.out.println("removeByValue(1): " + list1.removeByValue(100)); // false
+        System.out.println("removeByValue(100): " + list1.removeByValue(100)); // false
         System.out.println("После removeByValue(1): " + list1); // [99,-1,0]
         System.out.println("removeByValue(99): " + list1.removeByValue(99)); // true
-        System.out.println("После removeByValue(99): " + list1); // [-1,0]
+
+        List<Integer> testList = new List<>();
+        testList.add(0, 1);
+        testList.add(0, null);
+        System.out.println("До удаления null - testList:" + testList);
+        System.out.println("testList.removeByValue(null): " + testList.removeByValue(null)); // true
+        System.out.println("После удаления null - testList:" + testList);
 
         // Тестируем разворот
         List<String> list2 = new List<>();
@@ -56,15 +62,15 @@ public class Main {
         // разворот на пустом списке:
         List<Integer> list = new List<>();
         list.reverse();
-        System.out.println("Пустой список: " + list);
+        System.out.println("Пустой список (разворот): " + list);
 
         // Тестируем копирование
         List<Integer> copyList = list.copy(); // скопирируем пустой список
         System.out.println("Копия пустого списка list: " + copyList); // []
         List<String> copyList2 = list2.copy();
         System.out.println("Исходный список list2: " + list2);
-        System.out.println("Копия list2: " + copyList2); // [a,s, d, f]
-        list2.addFirst("w");
+        System.out.println("Копия list2: " + copyList2 + ", размер списка list2: " + list2.getSize()); // [a,s, d, f]
+        list2.add(4, "w");
         System.out.println("Проверим, что списки независимы, поменяем list2: " + list2);
         System.out.println("Копия list2 не изменилась: " + copyList2);
     }

@@ -23,20 +23,22 @@ public class List<E> {
     // ============= проверка индекса
     private void checkIndex(int index) {
         if (index < 0 || index >= count) {
-            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + " допуситмый диапазон индексов: [0; " + (count - 1) + "].");
+            if (count == 0) {
+                throw new IndexOutOfBoundsException("Недопустимый индекс. Список пуст.");
+            }
+            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + ". Допустимый диапазон индексов: [0; " + (count - 1) + "].");
         }
     }
 
     // ============ метод получения узла по индексу
     private ListItem<E> getNodeAt(int index) {
-        //  checkIndex(index); в выз. методах!!!
-        ListItem<E> current = head;
+        ListItem<E> currentNode = head;
 
         for (int i = 0; i < index; i++) {
-            current = current.getNext();
+            currentNode = currentNode.getNext();
         }
 
-        return current;
+        return currentNode;
     }
 
     // получение значения по указанному индексу================
@@ -45,7 +47,6 @@ public class List<E> {
 
         return getNodeAt(index).getData();
     }
-
 
     // Изменение значения по индексу пусть выдает старое значение.
     public E setData(int index, E newData) {
@@ -66,32 +67,26 @@ public class List<E> {
     }
 
     // вставка элемента по индексу
-    public void add(int index, E value) {
+    public void add(int index, E data) {
         if (index < 0 || index > count) {
             throw new IndexOutOfBoundsException("Недопустимый index: " + index + ". Допустимый диапазон [0; " + count + "].");
         }
 
-        if (index < 0 || index > count) {
-            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index
-                    + ". Допустимый диапазон: [0, " + count + "].");
-        }
-
-
         if (index == 0) {
-            addFirst(value);
+            addFirst(data);
             return;
         }
 
         ListItem<E> previousNode = getNodeAt(index - 1);
 
-        previousNode.setNext(new ListItem<>(value, previousNode.getNext()));
+        previousNode.setNext(new ListItem<>(data, previousNode.getNext()));
         count++;
     }
 
     // удаление первого элемента, пусть выдает значение элемента
     public E removeFirst() {
         if (head == null) {
-            throw new IllegalStateException("Список пуст.");
+            throw new NoSuchElementException("Список пуст.");
         }
 
         E oldFirstData = head.getData();
@@ -118,14 +113,9 @@ public class List<E> {
     }
 
     // удаление узла по значению, пусть выдает true, если элемент был удален
-    public boolean removeByValue(E data) {/// ////////////////////////////////
+    public boolean removeByValue(E data) {
         if (head == null) {
             return false;
-        }
-
-        if (data.equals(head.getData())) {
-            removeFirst();
-            return true;
         }
 
         if (data == null) {
@@ -133,6 +123,12 @@ public class List<E> {
                 removeFirst();
                 return true;
             }
+        }
+
+        if (data.equals(head.getData())) {
+            removeFirst();
+
+            return true;
         }
 
         ListItem<E> previousNode = head;
@@ -154,22 +150,21 @@ public class List<E> {
 
     // разворот списка за линейное время
     public void reverse() {
-        if (head == null || head.getNext() == null) {
+        if (count <= 1) {
             return;
         }
 
-        ListItem<E> previousItem = null;
-        ListItem<E> currentItem = head;
-        ListItem<E> nextItem = null;
+        ListItem<E> previousNode = null;
+        ListItem<E> currentNode = head;
 
-        while (currentItem != null) {
-            nextItem = currentItem.getNext();
-            currentItem.setNext(previousItem);
-            previousItem = currentItem;
-            currentItem = nextItem;
+        while (currentNode != null) {
+            ListItem<E> nextNode = currentNode.getNext();
+            currentNode.setNext(previousNode);
+            previousNode = currentNode;
+            currentNode = nextNode;
         }
 
-        head = previousItem;
+        head = previousNode;
     }
 
     // копирование списка
@@ -177,23 +172,24 @@ public class List<E> {
         // создаем новый пустой список
         List<E> newList = new List<>();
 
-        if (this.head == null) {
+        if (head == null) {
             return newList;
         }
 
         // копируем голову исходного списка
-        newList.head = new ListItem<>(this.head.getData());
+        newList.head = new ListItem<>(head.getData());
         // в исходном списке берем второй элемент
-        ListItem<E> currentItem = this.head.getNext();
+        ListItem<E> currentNode = head.getNext();
         ListItem<E> currentCopy = newList.head;
 
-        while (currentItem != null) {
+        while (currentNode != null) {
             // копируем след. элемент и связываем с предыдущим в копии списка:
-            currentCopy.setNext(new ListItem<>(currentItem.getData()));
+            currentCopy.setNext(new ListItem<>(currentNode.getData()));
             currentCopy = currentCopy.getNext();
-            newList.count++;
-            currentItem = currentItem.getNext();
+            currentNode = currentNode.getNext();
         }
+
+        newList.count = count;
 
         return newList;
     }
@@ -204,11 +200,11 @@ public class List<E> {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
 
-        ListItem<E> current = head;
+        ListItem<E> currentNode = head;
 
-        while (current != null) {
-            stringBuilder.append(current.getData()).append(", ");
-            current = current.getNext();
+        while (currentNode != null) {
+            stringBuilder.append(currentNode.getData()).append(", ");
+            currentNode = currentNode.getNext();
         }
 
         if (head != null) {
