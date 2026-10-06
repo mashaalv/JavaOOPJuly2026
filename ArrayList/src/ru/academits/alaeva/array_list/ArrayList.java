@@ -174,10 +174,13 @@ public class ArrayList<E> implements List<E> {
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
             if (o == null) {
+
                 if (items[i] == null) {
                     return i;
                 }
+
             } else {
+
                 if (o.equals(items[i])) {
                     return i;
                 }
@@ -190,11 +193,15 @@ public class ArrayList<E> implements List<E> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = size - 1; i >= 0; i--) {
+
             if (o == null) {
+
                 if (items[i] == null) {
                     return i;
                 }
+
             } else {
+
                 if (o.equals(items[i])) {
                     return i;
                 }
