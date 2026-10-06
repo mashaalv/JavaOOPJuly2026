@@ -1,6 +1,5 @@
 package ru.academits.alaeva.array_list;
 
-import javax.swing.plaf.PanelUI;
 import java.util.*;
 
 public class ArrayList<E> implements List<E> {
@@ -8,7 +7,7 @@ public class ArrayList<E> implements List<E> {
     private int size;
     private static final int DEFAULT_CAPACITY = 10;
 
-    // =====================================конструкторы
+    // ===================================== конструкторы
     public ArrayList() {
         //noinspection unchecked
         items = (E[]) new Object[DEFAULT_CAPACITY];// capacity == вместимость, размер списка size - это количество элементов
@@ -38,13 +37,13 @@ public class ArrayList<E> implements List<E> {
     // == вспомогательный метод checkIndex
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Некорректный индекс, размерность списка: " + size);
+            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + ". Допустимый диапазон индексов: [0; " + (size - 1) + "].");
         }
     }
 
     private void checkIndexForAdd(int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Некорректный индекс, размерность списка: " + size);
+            throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + ". Допустимый диапазон индексов: [0; " + size + "].");
         }
     }
 
@@ -100,11 +99,6 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public boolean remove(Object o) {
-        return false;
-    }
-
-    @Override
     public E remove(int index) {
         checkIndex(index);
         E oldValue = items[index];
@@ -123,7 +117,7 @@ public class ArrayList<E> implements List<E> {
         int itemsLength = items.length;
         int newCapacity;
 
-        if (minCapacity < itemsLength) {
+        if (minCapacity <= itemsLength) {
             return;
         }
 
@@ -178,73 +172,170 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public int indexOf(Object o) {
-        return 0;/////////////////////////////////////!!
-    }
+        for (int i = 0; i < size; i++) {
+            if (o == null) {
+                if (items[i] == null) {
+                    return i;
+                }
+            } else {
+                if (o.equals(items[i])) {
+                    return i;
+                }
+            }
+        }
 
-    // ====================================================остальные методы лист
-    @Override
-    public boolean contains(Object o) {
-        return false;
-    }
-
-    @Override
-    public Iterator<E> iterator() {
-        return null;
-    }
-
-    @Override
-    public Object[] toArray() {
-        return new Object[0];
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
-    }
-
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        for (int i = size - 1; i >= 0; i--) {
+            if (o == null) {
+                if (items[i] == null) {
+                    return i;
+                }
+            } else {
+                if (o.equals(items[i])) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     @Override
-    public ListIterator<E> listIterator() {
-        return null;
+    public boolean contains(Object o) {
+        return indexOf(o) >= 0;
     }
 
     @Override
-    public ListIterator<E> listIterator(int index) {
-        return null;
+    public boolean remove(Object o) {
+        int i = indexOf(o);
+
+        if (i >= 0) {
+            remove(i);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex) {
-        return List.of();
+    public Object[] toArray() {
+        return Arrays.copyOf(items, size);
+    }
+
+    /*   @Override
+       public <T> T[] toArray(T[] a) {
+           return null;
+       }
+   */
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        for (Object o : c) {
+            if (!contains(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> collection) {
+        return addAll(size, collection);
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> collection) {
+        checkIndexForAdd(index);
+
+        Object[] array = collection.toArray();
+        int arraySize = array.length;
+
+        if (arraySize == 0) {
+            return false;
+        }
+
+        ensureCapacity(size + arraySize);
+
+        System.arraycopy(items, index, items, index + arraySize, size - index);
+
+        for (int i = 0; i < arraySize; i++) {
+            //noinspection unchecked
+            items[index + i] = (E) array[i];
+        }
+
+        size = size + arraySize;
+
+        return true;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean isChanged = false;
+
+        for (int i = 0; i < size; i++) {
+            if (c.contains(items[i])) {
+                remove(i);
+                i--;
+                isChanged = true;
+            }
+        }
+
+        return isChanged;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean isChanged = false;
+
+        for (int i = 0; i < size; i++) {
+            if (!c.contains(items[i])) {
+                remove(i);
+                i--;
+                isChanged = true;
+            }
+        }
+
+        return isChanged;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new MyArrayListIterator();
+    }
+
+    private class MyArrayListIterator implements Iterator<E> {
+        private int cursor = 0; // позиция следующего элемента
+        private int lastReturned = -1; // позиция возвращаемого
+
+        @Override
+        public boolean hasNext() {
+            return cursor < size;
+        }
+
+        @Override
+        public E next() {
+            if (cursor >= size) {
+                throw new NoSuchElementException();
+            }
+
+            lastReturned = cursor;
+            return (E) items[cursor++];
+        }
+
+        @Override
+        public void remove() {
+            if (lastReturned < 0) {
+                throw new IllegalStateException();
+            }
+
+            System.arraycopy(items, lastReturned + 1, items, lastReturned, size - lastReturned - 1);
+            size--;
+            items[size] = null;
+            cursor = lastReturned;
+            lastReturned = -1;
+        }
     }
 }
