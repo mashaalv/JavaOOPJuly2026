@@ -60,7 +60,7 @@ public class Main {
         System.out.printf("Средний возраст: %.2f%n", averageAge);
 
         // Г. при помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
-        System.out.printf("Map, в котором ключи – имена, а значения – средний возраст:%n ", averageAge);
+        System.out.println("Map, в котором ключи – имена, а значения – средний возраст: ");
 
         Map<String, Double> averageAgeByName = persons.stream()
                 .collect(Collectors.groupingBy(
