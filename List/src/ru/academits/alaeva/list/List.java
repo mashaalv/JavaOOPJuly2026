@@ -1,6 +1,7 @@
 package ru.academits.alaeva.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class List<E> {
     private ListItem<E> head;
@@ -24,8 +25,9 @@ public class List<E> {
     private void checkIndex(int index) {
         if (index < 0 || index >= count) {
             if (count == 0) {
-                throw new IndexOutOfBoundsException("Недопустимый индекс. Список пуст.");
+                throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + ". Список пуст.");
             }
+
             throw new IndexOutOfBoundsException("Недопустимый индекс: " + index + ". Допустимый диапазон индексов: [0; " + (count - 1) + "].");
         }
     }
@@ -89,11 +91,11 @@ public class List<E> {
             throw new NoSuchElementException("Список пуст.");
         }
 
-        E oldFirstData = head.getData();
+        E FirstData = head.getData();
         head = head.getNext();
         count--;
 
-        return oldFirstData;
+        return FirstData;
     }
 
     // удаление элемента по индексу, пусть выдает значение элемента
@@ -118,16 +120,9 @@ public class List<E> {
             return false;
         }
 
-        if (data == null) {
-            if (head.getData() == null) {
-                removeFirst();
-                return true;
-            }
-        }
-
-        if (data.equals(head.getData())) {
+        // сравнение через Objects.equals
+        if (Objects.equals(data, head.getData())) {
             removeFirst();
-
             return true;
         }
 
@@ -135,7 +130,7 @@ public class List<E> {
         ListItem<E> currentNode = head.getNext();
 
         while (currentNode != null) {
-            if (data.equals(currentNode.getData())) {
+            if (Objects.equals(data, currentNode.getData())) {
                 previousNode.setNext(currentNode.getNext());
                 count--;
                 return true;
@@ -197,6 +192,10 @@ public class List<E> {
     // ================================  toString()
     @Override
     public String toString() {
+        if (head == null) {
+            return "[]";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
 
@@ -207,11 +206,9 @@ public class List<E> {
             currentNode = currentNode.getNext();
         }
 
-        if (head != null) {
-            stringBuilder.setLength(stringBuilder.length() - 2);
-        }
-
+        stringBuilder.setLength(stringBuilder.length() - 2); // обрезаем последние 2 элемента
         stringBuilder.append(']');
+
         return stringBuilder.toString();
     }
 }
