@@ -41,7 +41,7 @@ public class Main {
                 .collect(Collectors.joining(", ", "Имена: ", "."));
         System.out.println(names);
 
-// пункт В Список людей младше 18 и их средний возраст
+        // пункт В Список людей младше 18 и их средний возраст
         System.out.println("============ Список людей младше 18 и их средний возраст:=============");
 
         List<Person> personsUnder18 = persons.stream()
@@ -77,6 +77,6 @@ public class Main {
                 .filter(person -> person.getAge() <= 45 && person.getAge() >= 20)
                 .sorted(Comparator.comparingInt(Person::getAge).reversed())
                 .map(person -> person.getName())
-                .forEach(name-> System.out.println(name));
+                .forEach(name -> System.out.println(name));
     }
 }
